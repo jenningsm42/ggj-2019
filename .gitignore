@@ -1,8 +1,10 @@
-obj/
 build/
-x64/
-.vs/
+CMakeFiles/
 
 .ycm_extra_conf.py
 
 crash_report.txt
+
+Makefile
+CMakeCache.txt
+cmake_install.cmake
