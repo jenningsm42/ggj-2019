@@ -29,9 +29,12 @@ void Game::run() {
             }
             else if (event.type == sf::Event::Resized) {
                 // Update the view to the new size of the window
-                sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
-                m_window.setView(sf::View(visibleArea));
-                m_gui.setView(sf::View(visibleArea));
+                auto view = m_window.getView();
+                view.setSize(event.size.width, event.size.height);
+                view.setCenter(event.size.width / 2.f, event.size.height / 2.f);
+
+                m_window.setView(view);
+                m_gui.setView(view);
             }
 
             m_inputHandler.processEvent(event);
@@ -72,6 +75,18 @@ InputHandler& Game::getInputHandler() noexcept {
 
 sf::RenderWindow& Game::getRenderWindow() noexcept {
     return m_window;
+}
+
+sf::FloatRect Game::getViewBounds() const noexcept {
+    auto view = m_window.getView();
+    auto center = view.getCenter();
+    auto size = view.getSize();
+
+    return sf::FloatRect(
+        center.x - size.x / 2.f,
+        center.y - size.y / 2.f,
+        size.x,
+        size.y);
 }
 
 tgui::Gui& Game::getGui() noexcept {
