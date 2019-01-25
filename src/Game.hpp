@@ -22,6 +22,7 @@ class Game {
         SceneHandler& getSceneHandler() noexcept;
         InputHandler& getInputHandler() noexcept;
         sf::RenderWindow& getRenderWindow() noexcept;
+        sf::FloatRect getViewBounds() const noexcept;
         tgui::Gui& getGui() noexcept;
 
     private:
