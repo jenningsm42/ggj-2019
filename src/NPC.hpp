@@ -21,6 +21,7 @@ private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
     void pathing(float xDir, float yDir, float deltaTime, int react, float velocity);
 
+    float m_velocity;
     std::string m_name;
     float m_reactTimer;
     AnimatedSprite m_npcSprite;

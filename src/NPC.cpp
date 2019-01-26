@@ -7,6 +7,7 @@
 NPC::NPC(std::string inputName)
 : m_name(inputName),
   m_reactionTimer(0.f)
+  m_velocity(2.f)
 {
     // Nothing so far
 }
@@ -40,6 +41,13 @@ void NPC::update(Game& game, float deltaTime) noexcept {
     if (this->m_reactTimer >= 1.f) {
         this->react(this->pastReact, deltaTime);
     }
+
+    auto currPos = m_sprite.getPosition();
+    auto nextPos = std::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+
+    // Check map
+    // If nextPos is object, turn
+    // Else, go straight
 }
 
 void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
@@ -51,7 +59,7 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 
     auto modX = abs(currPos.x - objPos.x);
     auto modY = abs(currPos.y - objPos.y);
-    auto modifier = sqrt(modX + modY);
+    auto modifier = sqrtf(modX + modY);
 
     if (this->m_reactTimer < 1.f) {
         this->m_reactTimer = 0.f;
@@ -90,13 +98,13 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velo
         case 1:
             m_sprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
             m_sprite.play("run");
-            m_sprite.setScale(2.f*randX,2.f*rand.Y);
+            m_sprite.setScale(this->m_velocity * randX, this->m_velocity * rand.Y);
             break;
         //scared reaction
         case 2:
             m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_sprite.play("run");
-            m_sprite.setScale(2.f*randX,2.f*rand.Y);
+            m_sprite.setScale(this->m_velocity * randX,this->m_velocity * rand.Y);
             break;
         //cautious reaction just move back from object
         case 3:
