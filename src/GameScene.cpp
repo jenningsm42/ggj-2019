@@ -32,12 +32,13 @@ void GameScene::initialize(Game& game) {
 
     m_sprite.play("idle");
 
-
     m_sanityBar.addToGui(game);
     m_dangerBar.addToGui(game);
 
     m_player.initialize(game, "Billy");
 
+    m_sanityBar.addToGui(game);
+    m_dangerBar.addToGui(game);
 }
 
 void GameScene::update(Game& game, float deltaTime) noexcept {
@@ -61,13 +62,13 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
         m_sprite.play("idle");
     }
 
-
     m_sanityBar.update(deltaTime / 2);
     m_dangerBar.update(deltaTime / 5);
 
     m_player.update(game, deltaTime);
 
-
+    m_sanityBar.update(deltaTime / 2);
+    m_dangerBar.update(deltaTime / 5);
 }
 
 void GameScene::draw(sf::RenderWindow& window) noexcept {

@@ -2,6 +2,7 @@
 #define GAMESCENE_H
 #include "Scene.hpp"
 #include "AnimatedSprite.hpp"
+#include "Bar.hpp"
 
 #include "Bar.hpp"
 
