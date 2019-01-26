@@ -2,6 +2,7 @@
 #define GAMESCENE_H
 #include "Scene.hpp"
 #include "AnimatedSprite.hpp"
+#include "Player.hpp"
 
 class GameScene : public Scene {
     public:
@@ -12,6 +13,7 @@ class GameScene : public Scene {
     private:
         sf::Text m_text;
         AnimatedSprite m_sprite;
+        Player m_player;
 };
 
 #endif // GAMESCENE_H

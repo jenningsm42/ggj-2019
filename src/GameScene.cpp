@@ -26,6 +26,7 @@ void GameScene::initialize(Game& game) {
     m_sprite.addAnimation("run", 0, 1, 8, 0.15f);
 
     m_sprite.play("idle");
+    m_player.initialize(game, "Billy");
 }
 
 void GameScene::update(Game& game, float deltaTime) noexcept {
@@ -48,9 +49,13 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
     } else {
         m_sprite.play("idle");
     }
+
+    m_player.update(game, deltaTime);
+
 }
 
 void GameScene::draw(sf::RenderWindow& window) noexcept {
     window.draw(m_sprite);
     window.draw(m_text);
+    window.draw(m_player);
 }
