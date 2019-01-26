@@ -9,8 +9,27 @@ NPC::NPC(std::string inputName)
     // Nothing so far
 }
 
-void NPC::initialize(Game& game) noexcept {
+void NPC::initialize(Game& gamem, std::string inputName) noexcept {
     this->initReactions();
+
+    auto& cache = game.getAssetCache();
+
+    auto adventurerTexture = cache.getTexture("bandit.png");
+    m_npcSprite.setTexture(*adventurerTexture);
+    m_npcSprite.setGridSize(8, 7);
+
+    auto spriteBounds = m_playerSprite.getLocalBounds();
+    m_npcSprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
+    m_npcSprite.setScale(2.f, 2.f);
+
+    m_npcSprite.setPosition(150, 250);
+
+    m_npcSprite.addAnimation("idle", 0, 0, 4, 0.5f);
+    m_npcSprite.addAnimation("run", 0, 1, 8, 0.15f);
+
+    m_npcSprite.play("idle");
+
+    this->m_name = inputName;
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
@@ -44,7 +63,7 @@ void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
 void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velocity) {
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
-    //fix with relations of offset
+
     while(xDir*randX == xDir){
         randX = rand()% -1 +1;
     }
@@ -63,15 +82,18 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velo
             m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
+<<<<<<< HEAD
         //cautious reaction just move back from object 
         case 3:
             m_sprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
             m_sprite.play("run");
             m_sprite(xDir,yDir);
 
+=======
+>>>>>>> 943c6b3b39497c0d605bb7a1bf7c8b9cfcd0b198
     }
 }
 
 void NPC::initReactions() {
-    this->m_reactSpeed[ObjectType::Door] = 1.3f;
+    this->m_reactSpeed.insert(ObjectType::Door, 1.3f);
 }
