@@ -15,9 +15,11 @@ public:
     void react(std::shared_ptr<InteractiveObject> obj);
 
 private:
-    virtual void draw(sf::renderTarget& window, sf::renderState state);
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates state);
     void pathing(float xDir, float yDir, float vel);
 
+    AnimatedSprite m_sprite;
+    std::string m_name;
 };
 
 

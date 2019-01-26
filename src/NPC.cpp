@@ -3,8 +3,9 @@
 //
 
 #include "NPC.hpp"
+
 NPC::NPC(){
-    
+
 }
 
 void NPC::initialize(Game& game) {
@@ -13,6 +14,14 @@ void NPC::initialize(Game& game) {
 
 void NPC::update(Game& game, float deltaTime) {
 
+}
+
+void react(std::shared_ptr<InteractiveObject> obj) {
+
+}
+
+void draw(sf::RenderTarget& target, sf::RenderStates state) {
+    target.draw(m_sprite);
 }
 
 void NPC::pathing(float xDir, float yDir, float vel) {
