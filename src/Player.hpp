@@ -26,7 +26,7 @@ private:
     AnimatedSprite m_playerSprite;
     std::string m_name;
     float m_currentXDirection;
-    virtual void draw(sf::RenderTarget& window, sf::RenderStates state) const noexcept;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const noexcept;
     int sprintLevel;
     const int sprintConst = 1000;
     void setXDirection(float dir);
