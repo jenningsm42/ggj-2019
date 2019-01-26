@@ -96,21 +96,27 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velo
     switch(react) {
         //normal reaction
         case 1:
-            m_sprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
-            m_sprite.play("run");
-            m_sprite.setScale(this->m_velocity * randX, this->m_velocity * rand.Y);
+            m_npcSprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
+            m_npcSprite.play("run");
+            m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * rand.Y);
             break;
         //scared reaction
         case 2:
-            m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
-            m_sprite.play("run");
-            m_sprite.setScale(this->m_velocity * randX,this->m_velocity * rand.Y);
+            m_npcSprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
+            m_npcSprite.play("run");
+            m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * rand.Y);
             break;
         //cautious reaction just move back from object
         case 3:
-            m_sprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
-            m_sprite.play("run");
-            m_sprite.setScale(xDir,yDir);
+            m_npcSprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
+            m_npcSprite.play("run");
+            m_npcSprite.setScale(xDir,yDir);
+            break;
+         //go straight
+        case 4:
+            m_npcSprite.move(xDir*deltaTime*velocity,yDir*deltaTime*velocity);
+            m_npcSprite("run");
+            m_npcSprite.setScale(xDir,yDir);
         default:
             break;
     }
