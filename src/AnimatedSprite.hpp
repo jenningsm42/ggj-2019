@@ -31,6 +31,10 @@ class AnimatedSprite : public sf::Sprite {
         /* play switches to the given named animation */
         void play(const std::string& name) noexcept;
 
+        /* playAfter will switch to another animation after
+         * the current one finishes */
+        void playAfter(const std::string& name) noexcept;
+
         void update(float deltaTime) noexcept;
 
     private:
@@ -41,6 +45,7 @@ class AnimatedSprite : public sf::Sprite {
         int m_currentRow;
         float m_currentFrameTime;
         std::string m_currentAnimationName;
+        std::string m_nextAnimationName;
         std::tuple<int, int, int, float> m_currentAnimation;
         sf::IntRect m_spriteRectangle; // Determines which part of texture to draw
 
