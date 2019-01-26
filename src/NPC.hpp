@@ -22,7 +22,9 @@ private:
     void pathing(float xDir, float yDir, float deltaTime, int react, float velocity);
 
     std::string m_name;
+    float m_reactTimer;
     AnimatedSprite m_npcSprite;
+    std::shared_ptr<InteractiveObject> pastReact;
     std::unordered_map<ObjectType, float> m_reactSpeed;
 };
 

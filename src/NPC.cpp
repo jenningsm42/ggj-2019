@@ -5,7 +5,9 @@
 #include "NPC.hpp"
 
 NPC::NPC(std::string inputName)
-: m_name(inputName) {
+: m_name(inputName),
+  m_reactionTimer(0.f)
+{
     // Nothing so far
 }
 
@@ -33,18 +35,29 @@ void NPC::initialize(Game& gamem, std::string inputName) noexcept {
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
+    this->m_reactTimer += deltaTime;
 
+    if (this->m_reactTimer >= 1.f) {
+        this->react(this->pastReact, deltaTime);
+    }
 }
 
 void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
+    this->pastReact = obj;
+
     auto shockType = obj.getType();
     auto currPos = m_sprite.getPosition();
     auto objPos = obj.getPosition();
 
     auto modX = abs(currPos.x - objPos.x);
     auto modY = abs(currPos.y - objPos.y);
-
     auto modifier = sqrt(modX + modY);
+
+    if (this->m_reactTimer < 1.f) {
+        this->m_reactTimer = 0.f;
+        this.pathing(currPos.x, currPos.y, deltaTime, 3, 0.1f);
+        return;
+    }
 
     switch (shockType) {
         case ObjectType::Door:
@@ -57,40 +70,41 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 }
 
 void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
-    // target.draw(m_sprite);
+    target.draw(m_npcSprite);
 }
 
 void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velocity) {
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
 
-    while(xDir*randX == xDir){
+    while(xDir*randX == xDir) {
         randX = rand()% -1 +1;
     }
-    else while(yDir*randY == yDir){
+
+    while(yDir*randY == yDir) {
         randY = rand()% -1 +1;
     }
-    switch(react){
+
+    switch(react) {
         //normal reaction
         case 1:
             m_sprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
-
+            break;
         //scared reaction
         case 2:
             m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
-<<<<<<< HEAD
-        //cautious reaction just move back from object 
+            break;
+        //cautious reaction just move back from object
         case 3:
             m_sprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
             m_sprite.play("run");
-            m_sprite(xDir,yDir);
-
-=======
->>>>>>> 943c6b3b39497c0d605bb7a1bf7c8b9cfcd0b198
+            m_sprite.setScale(xDir,yDir);
+        default:
+            break;
     }
 }
 
