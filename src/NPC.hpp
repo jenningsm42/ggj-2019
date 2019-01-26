@@ -9,7 +9,7 @@
 #include "AnimatedSprite.hpp"
 #include "InteractiveObject.hpp"
 
-class NPC {
+class NPC : public sf::Drawable {
 public:
     NPC();
 
@@ -18,7 +18,7 @@ public:
     void react(std::shared_ptr<InteractiveObject> obj);
 
 private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates state);
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
     void pathing(float xDir, float yDir, float vel);
 
     AnimatedSprite m_sprite;

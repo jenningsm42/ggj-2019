@@ -16,11 +16,11 @@ void NPC::update(Game& game, float deltaTime) noexcept {
 
 }
 
-void react(std::shared_ptr<InteractiveObject> obj) {
+void NPC::react(std::shared_ptr<InteractiveObject> obj) {
 
 }
 
-void draw(sf::RenderTarget& target, sf::RenderStates state) {
+void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
     // target.draw(m_sprite);
 }
 
