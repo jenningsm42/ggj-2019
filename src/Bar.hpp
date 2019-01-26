@@ -7,11 +7,13 @@
 
 class Bar {
     public:
-        Bar(Game &game, std::string barName) noexcept;
-        Bar(Game &game, std::string barName, int xPos, int yPos) noexcept;
+        Bar(std::string barName) noexcept;
+        Bar(std::string barName, int xPos, int yPos) noexcept;
         ~Bar();
 
+        void addToGui(Game& game);
         void update(float incrementVal);
+        void create(std::string barName);
         void setPosition(int xPos, int yPos);
 
     private:

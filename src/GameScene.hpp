@@ -6,14 +6,15 @@
 
 class GameScene : public Scene {
     public:
+        GameScene() noexcept;
         void initialize(Game&) override;
         void update(Game&, float deltaTime) noexcept override;
         void draw(sf::RenderWindow&) noexcept override;
 
     private:
         sf::Text m_text;
-        Bar *m_sanityBar;
-        Bar *m_dangerBar;
+        Bar m_sanityBar;
+        Bar m_dangerBar;
         AnimatedSprite m_sprite;
 };
 
