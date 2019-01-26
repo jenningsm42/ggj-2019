@@ -11,18 +11,19 @@
 
 class NPC : public sf::Drawable {
 public:
-    NPC();
+    NPC(std::string inputName);
 
     void initialize (Game&) noexcept;
     void update (Game&, float deltaTime) noexcept;
-    void react(std::shared_ptr<InteractiveObject> obj);
+    void react(std::shared_ptr<InteractiveObject> obj, float deltaTime);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
-    void pathing(float xDir, float yDir, float deltaTime, int react, float offset);
+    void pathing(float xDir, float yDir, float deltaTime, int react, float velocity);
 
-    AnimatedSprite m_sprite;
     std::string m_name;
+    AnimatedSprite m_sprite;
+    std::unordered_map<ObjectType, float> m_reactSpeed;
 };
 
 
