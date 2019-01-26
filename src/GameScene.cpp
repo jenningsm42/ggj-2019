@@ -13,7 +13,11 @@ void GameScene::initialize(Game& game) {
     button->setPosition(100, 100);
     gui.add(button);
 
-    m_sanityBar = new Bar(game, 1);
+    m_sanityBar = new Bar(game, "Sanity Bar");
+    m_sanityBar->setPosition(10, 500);
+
+    m_dangerBar = new Bar(game, "Danger Bar");
+    m_dangerBar->setPosition(10, 450);
 
     auto adventurerTexture = cache.getTexture("bandit.png");
     m_sprite.setTexture(*adventurerTexture);

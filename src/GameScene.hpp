@@ -13,6 +13,7 @@ class GameScene : public Scene {
     private:
         sf::Text m_text;
         Bar *m_sanityBar;
+        Bar *m_dangerBar;
         AnimatedSprite m_sprite;
 };
 

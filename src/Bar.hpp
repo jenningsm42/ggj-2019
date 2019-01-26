@@ -7,10 +7,12 @@
 
 class Bar {
     public:
-        Bar(Game& game, int whichBar) noexcept;
+        Bar(Game &game, std::string barName) noexcept;
+        Bar(Game &game, std::string barName, int xPos, int yPos) noexcept;
         ~Bar();
 
         void update(float incrementVal);
+        void setPosition(int xPos, int yPos);
 
     private:
         float m_percentage;
