@@ -4,6 +4,11 @@
 #include "AnimatedSprite.hpp"
 #include "Bar.hpp"
 
+#include "Bar.hpp"
+
+#include "Player.hpp"
+
+
 class GameScene : public Scene {
     public:
         GameScene() noexcept;
@@ -16,6 +21,7 @@ class GameScene : public Scene {
         Bar m_sanityBar;
         Bar m_dangerBar;
         AnimatedSprite m_sprite;
+        Player m_player;
 };
 
 #endif // GAMESCENE_H

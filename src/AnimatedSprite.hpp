@@ -4,6 +4,7 @@
 #include <tuple>
 #include <SFML/Graphics.hpp>
 
+
 class AnimatedSprite : public sf::Sprite {
     public:
         AnimatedSprite();
