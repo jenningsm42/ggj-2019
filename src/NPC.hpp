@@ -2,8 +2,8 @@
 // Created by Christian Wilkerson on 2019-01-26.
 //
 
-#ifndef GGJ2019_NPC_H
-#define GGJ2019_NPC_H
+#ifndef NPC_H
+#define NPC_H
 
 
 class NPC {

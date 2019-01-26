@@ -3,3 +3,18 @@
 //
 
 #include "NPC.hpp"
+NPC::NPC(){
+    
+}
+
+void NPC::initialize(Game& game) {
+
+}
+
+void NPC::update(Game& game, float deltaTime) {
+
+}
+
+void NPC::pathing(float xDir, float yDir, float vel) {
+
+}
