@@ -7,7 +7,8 @@ class Game;
 
 enum struct ObjectType {
     Door,
-    Stove
+    Stove,
+    Sink
 };
 
 class InteractiveObject : public sf::Drawable {
