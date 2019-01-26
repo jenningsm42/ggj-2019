@@ -2,10 +2,9 @@
 // Created by Christian Wilkerson on 2019-01-25.
 //
 
-#include <iostream>
 #include "Player.hpp"
 Player::Player()
- : m_currentXDirection(2.f), sprintLevel(50){
+ : m_currentXDirection(2.f), sprintLevel(sprintConst){
 }
 
 void Player::initialize(Game& game, std::string name) {
@@ -36,7 +35,6 @@ void Player::update(Game& game, float deltaTime) noexcept{
     const bool movingUp = input.getKeyDown(sf::Keyboard::W);
     const bool movingDown = input.getKeyDown(sf::Keyboard::S);
     const bool sprint = input.getKeyDown(sf::Keyboard::LShift);
-    const int sprintConst = 1000;
 
 
     const float speed = 180.f;
