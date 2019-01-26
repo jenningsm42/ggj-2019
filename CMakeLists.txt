@@ -4,6 +4,8 @@ project(GGJ2019 VERSION 0.1
                 DESCRIPTION "Submission for Global Game Jam 2019"
                 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 14)
+
 include_directories("src")
 file(GLOB source_files "src/*.hpp" "src/*.cpp")
 
