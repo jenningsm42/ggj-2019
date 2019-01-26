@@ -7,16 +7,19 @@ class Game;
 
 class InteractiveObject : public sf::Drawable {
     public:
-        InteractiveObject(Game&, const std::string& path);
+        InteractiveObject();
+        ~InteractiveObject();
+
         void update(Game&, float deltaTime) noexcept;
 
         void setPosition(float x, float y) noexcept;
 
-        void action() noexcept;
+        virtual void action() = 0;
 
-    private:
+    protected:
         AnimatedSprite m_sprite;
 
+    private:
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 };
 
