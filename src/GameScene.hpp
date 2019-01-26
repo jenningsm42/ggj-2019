@@ -1,13 +1,9 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 #include "Scene.hpp"
-#include "AnimatedSprite.hpp"
 #include "Bar.hpp"
-
-#include "Bar.hpp"
-
 #include "Player.hpp"
-
+#include "InteractiveObjects.hpp"
 
 class GameScene : public Scene {
     public:
@@ -17,11 +13,10 @@ class GameScene : public Scene {
         void draw(sf::RenderWindow&) noexcept override;
 
     private:
-        sf::Text m_text;
         Bar m_sanityBar;
         Bar m_dangerBar;
-        AnimatedSprite m_sprite;
         Player m_player;
+        InteractiveObjects m_objects;
 };
 
 #endif // GAMESCENE_H
