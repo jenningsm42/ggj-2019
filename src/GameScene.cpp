@@ -1,6 +1,11 @@
 #include "GameScene.hpp"
 #include "Game.hpp"
 
+GameScene::GameScene() noexcept : m_sanityBar("Sanity Bar"), m_dangerBar("Danger Bar") {
+    this->m_sanityBar.setPosition(10, 500);
+    this->m_dangerBar.setPosition(10, 450);
+}
+
 void GameScene::initialize(Game& game) {
     auto& cache = game.getAssetCache();
     auto& gui = game.getGui();
@@ -26,7 +31,13 @@ void GameScene::initialize(Game& game) {
     m_sprite.addAnimation("run", 0, 1, 8, 0.15f);
 
     m_sprite.play("idle");
+
+
+    m_sanityBar.addToGui(game);
+    m_dangerBar.addToGui(game);
+
     m_player.initialize(game, "Billy");
+
 }
 
 void GameScene::update(Game& game, float deltaTime) noexcept {
@@ -50,7 +61,12 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
         m_sprite.play("idle");
     }
 
+
+    m_sanityBar.update(deltaTime / 2);
+    m_dangerBar.update(deltaTime / 5);
+
     m_player.update(game, deltaTime);
+
 
 }
 
