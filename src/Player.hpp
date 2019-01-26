@@ -29,6 +29,7 @@ private:
     float m_currentXDirection;
     virtual void draw(sf::RenderTarget& window, sf::RenderStates state) const noexcept;
     int sprintLevel;
+    const int sprintConst = 1000;
 
 };
 
