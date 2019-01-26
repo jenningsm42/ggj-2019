@@ -24,9 +24,16 @@ void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
     // target.draw(m_sprite);
 }
 
-void NPC::pathing(float xDir, float yDir, float deltaTime, int react) {
+void NPC::pathing(float xDir, float yDir, float deltaTime, int react float velocity) {
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
+    //fix with relations of offset
+    while(xDir*randX == xDir){
+        randX = rand()% -1 +1;
+    }
+    else while(yDir*randY == yDir){
+        randY = rand()% -1 +1;
+    }
     switch(react){
         //normal reaction
         case 1:
@@ -36,7 +43,7 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react) {
 
         //scared reaction
         case 2:
-            m_sprite.move(xDir*randX*deltaTime*3,yDir*randY*deltaTime*3);
+            m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*3);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
 
