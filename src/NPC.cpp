@@ -60,9 +60,14 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velo
 
         //scared reaction
         case 2:
-            m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*3);
+            m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
+        //cautious reaction just move back from object 
+        case 3:
+            m_sprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
+            m_sprite.play("run");
+            m_sprite(xDir,yDir);
 
     }
 }
