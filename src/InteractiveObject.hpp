@@ -5,18 +5,27 @@
 
 class Game;
 
+enum struct ObjectType {
+    Door
+};
+
 class InteractiveObject : public sf::Drawable {
     public:
-        InteractiveObject(Game&, const std::string& path);
-        void update(Game&, float deltaTime) noexcept;
+        InteractiveObject();
+        ~InteractiveObject();
 
+        void update(Game&, float deltaTime) noexcept;
         void setPosition(float x, float y) noexcept;
 
-        void action() noexcept;
+        virtual ObjectType getType() const noexcept = 0;
+        sf::Vector2f getPosition() noexcept;
 
-    private:
+        virtual void action() = 0;
+
+    protected:
         AnimatedSprite m_sprite;
 
+    private:
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 };
 
