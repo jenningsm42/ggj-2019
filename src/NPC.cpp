@@ -44,7 +44,7 @@ void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
 void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velocity) {
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
-    //fix with relations of offset
+
     while(xDir*randX == xDir){
         randX = rand()% -1 +1;
     }
@@ -63,10 +63,9 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, int react, float velo
             m_sprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*3);
             m_sprite.play("run");
             m_sprite.setScale(2.f*randX,2.f*rand.Y);
-
     }
 }
 
 void NPC::initReactions() {
-    this->m_reactSpeed[ObjectType::Door] = 1.3f;
+    this->m_reactSpeed.insert(ObjectType::Door, 1.3f);
 }
