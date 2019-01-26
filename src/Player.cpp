@@ -3,6 +3,8 @@
 //
 
 #include "Player.hpp"
+#include <cmath>
+
 Player::Player()
  : m_currentXDirection(2.f), sprintLevel(sprintConst){
 }
@@ -128,8 +130,8 @@ void Player::update(Game& game, float deltaTime) noexcept{
     }
 
     if(velX!=0 && velY!=0){
-        velX=velX/sqrt(2);
-        velY=velY/sqrt(2);
+        velX=velX/sqrtf(2);
+        velY=velY/sqrtf(2);
     }
 
     m_playerSprite.move(velX*deltaTime,velY*deltaTime);
