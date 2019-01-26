@@ -13,6 +13,8 @@ void GameScene::initialize(Game& game) {
     button->setPosition(100, 100);
     gui.add(button);
 
+    m_sanityBar = new Bar(game, 1);
+
     auto adventurerTexture = cache.getTexture("bandit.png");
     m_sprite.setTexture(*adventurerTexture);
     m_sprite.setGridSize(8, 7);
@@ -48,6 +50,8 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
     } else {
         m_sprite.play("idle");
     }
+
+    m_sanityBar->update(deltaTime / 2);
 }
 
 void GameScene::draw(sf::RenderWindow& window) noexcept {
