@@ -26,6 +26,10 @@ void InteractiveObject::setPosition(float x, float y) noexcept {
     m_sprite.setPosition(x, y);
 }
 
+sf::Vector2f InteractiveObject::getPosition() noexcept {
+    return m_sprite.getPosition();
+}
+
 void InteractiveObject::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(m_sprite, states);
 }

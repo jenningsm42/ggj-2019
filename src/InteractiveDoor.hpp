@@ -6,6 +6,7 @@ class InteractiveDoor : public InteractiveObject {
     public:
         InteractiveDoor(Game&);
 
+        virtual ObjectType getType() const noexcept override;
         virtual void action() override;
 };
 

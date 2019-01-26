@@ -13,6 +13,10 @@ InteractiveDoor::InteractiveDoor(Game& game) {
     m_sprite.addAnimation("open", 2, 0, 1, 1.f);
 }
 
+ObjectType InteractiveDoor::getType() const noexcept {
+    return ObjectType::Door;
+}
+
 void InteractiveDoor::action() {
     m_sprite.play("opening");
     m_sprite.playAfter("open");
