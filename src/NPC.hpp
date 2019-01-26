@@ -19,7 +19,7 @@ public:
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
-    void pathing(float xDir, float yDir, float vel);
+    void pathing(float xDir, float yDir, float deltaTime, int react);
 
     AnimatedSprite m_sprite;
     std::string m_name;
