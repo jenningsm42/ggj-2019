@@ -5,12 +5,15 @@
 #ifndef NPC_H
 #define NPC_H
 
+#include "Game.hpp"
+#include "AnimatedSprite.hpp"
+#include "InteractiveObject.hpp"
 
 class NPC {
 public:
     NPC();
 
-    void initialize (Game&);
+    void initialize (Game&) noexcept;
     void update (Game&, float deltaTime) noexcept;
     void react(std::shared_ptr<InteractiveObject> obj);
 
