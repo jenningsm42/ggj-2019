@@ -18,8 +18,7 @@ public:
     void update(Game&, float deltaTime) noexcept;
     void setName(std::string);
     std::string getName();
-    void setXDirection(float dir);
-    float getXDirection();
+
 
 
 
@@ -30,6 +29,8 @@ private:
     virtual void draw(sf::RenderTarget& window, sf::RenderStates state) const noexcept;
     int sprintLevel;
     const int sprintConst = 1000;
+    void setXDirection(float dir);
+    float getXDirection();
 
 };
 
