@@ -9,8 +9,27 @@ NPC::NPC(std::string inputName)
     // Nothing so far
 }
 
-void NPC::initialize(Game& game) noexcept {
+void NPC::initialize(Game& gamem, std::string inputName) noexcept {
     this->initReactions();
+
+    auto& cache = game.getAssetCache();
+
+    auto adventurerTexture = cache.getTexture("bandit.png");
+    m_npcSprite.setTexture(*adventurerTexture);
+    m_npcSprite.setGridSize(8, 7);
+
+    auto spriteBounds = m_playerSprite.getLocalBounds();
+    m_npcSprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
+    m_npcSprite.setScale(2.f, 2.f);
+
+    m_npcSprite.setPosition(150, 250);
+
+    m_npcSprite.addAnimation("idle", 0, 0, 4, 0.5f);
+    m_npcSprite.addAnimation("run", 0, 1, 8, 0.15f);
+
+    m_npcSprite.play("idle");
+
+    this->m_name = inputName;
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
