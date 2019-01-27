@@ -58,4 +58,5 @@ void GameScene::draw(sf::RenderWindow& window) noexcept {
     window.draw(m_map);
     window.draw(m_objects);
     window.draw(m_player);
+    window.draw(m_npc);
 }

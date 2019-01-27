@@ -7,7 +7,8 @@
 NPC::NPC(std::string inputName)
         : m_name(inputName),
           m_reactTimer(0.f),
-          m_velocity(2.f)
+          m_velocity(2.f),
+          pastReact(nullptr)
 {
 // Nothing so far
 }
@@ -37,7 +38,7 @@ void NPC::initialize(Game& game) noexcept {
 void NPC::update(Game& game, float deltaTime) noexcept {
     this->m_reactTimer += deltaTime;
 
-    if (this->m_reactTimer >= 1.f) {
+    if (this->m_reactTimer >= 1.f and this->pastReact != nullptr) {
         this->react(this->pastReact, deltaTime);
     }
 
@@ -47,7 +48,7 @@ void NPC::update(Game& game, float deltaTime) noexcept {
     // Check map
     // If nextPos is object, turn
     // Else, go straight
-    this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Straight, this->m_velocity);
+    this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Straight, 7);
 }
 
 void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
@@ -86,38 +87,38 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
 
-    while(xDir*randX == xDir) {
+    if (xDir*randX == xDir) {
         randX = rand()% -1 +1;
     }
 
-    while(yDir*randY == yDir) {
+    if (yDir*randY == yDir) {
         randY = rand()% -1 +1;
     }
 
     switch(react) {
         //normal reaction
         case MovementType::Random:
-            m_npcSprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
+            m_npcSprite.move(this->m_velocity*randX*deltaTime,this->m_velocity*randY*deltaTime);
             m_npcSprite.play("run");
             m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * randY);
             break;
             //scared reaction
         case MovementType::Scared:
-            m_npcSprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
+            m_npcSprite.move(this->m_velocity*randX*deltaTime*velocity,this->m_velocity*randY*deltaTime*velocity);
             m_npcSprite.play("run");
             m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * randY);
             break;
             //cautious reaction just move back from object
         case MovementType::SlowBack:
-            m_npcSprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
+            m_npcSprite.move(-this->m_velocity*deltaTime*velocity, -this->m_velocity*deltaTime*velocity);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(xDir,yDir);
+            m_npcSprite.setScale(this->m_velocity,this->m_velocity);
             break;
             //go straight
         case MovementType::Straight:
-            m_npcSprite.move(xDir*deltaTime*velocity,yDir*deltaTime*velocity);
+            m_npcSprite.move(this->m_velocity*deltaTime*velocity,this->m_velocity*deltaTime*velocity);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(xDir,yDir);
+            m_npcSprite.setScale(this->m_velocity,this->m_velocity);
         default:
             break;
     }
