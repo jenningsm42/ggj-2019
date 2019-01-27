@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 #include <string>
+#include <set>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Tileset.hpp"
@@ -21,10 +22,13 @@ class Map : public sf::Drawable {
 
         void update(Game&, float deltaTime) noexcept;
 
+        bool canPass(float x, float y) noexcept;
+
     private:
         Tileset m_tileset;
         std::vector<TileType> m_tiles;
         std::unordered_map<TileType, std::pair<int, int>> m_tileMappings;
+        std::set<std::pair<int, int>> m_collisionTiles;
         unsigned int m_columns;
         unsigned int m_rows;
         sf::Texture m_tilesTexture;
