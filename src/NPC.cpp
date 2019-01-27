@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <set>
 #include "NPC.hpp"
 
 NPC::NPC(std::string inputName)
@@ -211,4 +212,33 @@ void NPC::initGraph() {
 
     m_positions.push_back(std::pair<float, float>(728.f, 185.f));
     m_positions.push_back(std::pair<float, float>(728.f, 260.f));
+}
+
+std::vector<int> NPC::getPathNodes(int sourceIndex, int endIndex) noexcept {
+    std::queue<std::vector<int>> toVisit;
+    std::set<int> visited;
+
+    std::vector<int> path;
+    path.push_back(sourceIndex);
+    toVisit.push(path);
+
+    while (!toVisit.empty()) {
+        auto current = toVisit.front();
+        toVisit.pop();
+
+        if (current.back() == endIndex) {
+            return current;
+        }
+
+        for (auto& other : m_adjMatrix[current.back()]) {
+            auto it = visited.find(other);
+            if (it != visited.end()) {
+                std::vector<int> newPath = current;
+                newPath.push_back(other);
+                toVisit.push(newPath);
+            }
+        }
+    }
+
+    return std::vector<int>();
 }

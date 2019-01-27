@@ -31,6 +31,8 @@ private:
     void initReactions();
     void initGraph();
 
+    std::vector<int> getPathNodes(int sourceIndex, int endIndex) noexcept;
+
     int m_dir;
     const int m_adjMatrix[23][23] = {
         {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
