@@ -15,12 +15,22 @@ void Map::initialize(Game& game) {
 }
 
 void Map::loadMap(Game& game, const std::string& path) {
+    m_tiles.clear();
+    m_collisionTiles.clear();
+
     parseMap(game, path);
     renderMap();
 }
 
 void Map::update(Game& game, float deltaTime) noexcept {
     m_objects.update(game, deltaTime);
+}
+
+bool Map::canPass(float x, float y) noexcept {
+    int length = m_tileset.getTileLength();
+    auto tileCoords = std::make_pair<int, int>(x / length, y / length);
+    auto collisionIterator = m_collisionTiles.find(tileCoords);
+    return collisionIterator != m_collisionTiles.end();
 }
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
