@@ -25,6 +25,8 @@ void Player::initialize(Game& game, std::string name) {
     m_playerSprite.addAnimation("run", 0, 1, 8, 0.15f);
 
     m_playerSprite.play("idle");
+
+    this->setName(name);
 }
 
 void Player::update(Game& game, float deltaTime) noexcept{
@@ -163,4 +165,3 @@ std::string Player::getName() {
 void Player::setName(std::string name) {
     this->m_name=name;
 }
-
