@@ -5,7 +5,12 @@
 #include "Player.hpp"
 #include <cmath>
 
-Player::Player() : sprintConst(1000), m_currentXDirection(2.f), sprintLevel(sprintConst) {
+Player::Player()
+    : m_objectInteractionRadius(200.f),
+    sprintConst(1000),
+    m_showRadius(false),
+    m_currentXDirection(2.f),
+    sprintLevel(sprintConst) {
 }
 
 void Player::initialize(Game& game, std::string name) {
@@ -32,6 +37,10 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
     m_playerSprite.update(deltaTime);
 
     auto& input = game.getInputHandler();
+
+    if (input.getKeyTapped(sf::Keyboard::F)) {
+        m_showRadius = !m_showRadius;
+    }
 
     const bool movingLeft = input.getKeyDown(sf::Keyboard::A);
     const bool movingRight = input.getKeyDown(sf::Keyboard::D);
@@ -202,10 +211,34 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const noexcept {
+    if (m_showRadius) {
+        sf::CircleShape interactionRadius(m_objectInteractionRadius);
+        auto pos = m_playerSprite.getPosition();
+        auto bounds = m_playerSprite.getLocalBounds();
+        interactionRadius.setPosition(
+            pos.x + bounds.width / 2.f - m_objectInteractionRadius,
+            pos.y + bounds.height / 2.f - m_objectInteractionRadius);
+        interactionRadius.setOutlineColor(sf::Color(64, 196, 64, 128));
+        interactionRadius.setOutlineThickness(4.f);
+
+        interactionRadius.setFillColor(sf::Color::Transparent);
+        target.draw(interactionRadius, states);
+    }
+
     target.draw(m_playerSprite, states);
 }
 
+sf::Vector2f Player::getPosition() noexcept {
+    return m_playerSprite.getPosition();
+}
 
+sf::FloatRect Player::getBounds() noexcept {
+    return m_playerSprite.getLocalBounds();
+}
+
+float Player::getObjectRadius() noexcept {
+    return m_objectInteractionRadius;
+}
 
 float Player::getXDirection() {
     return this->m_currentXDirection;

@@ -3,7 +3,6 @@
 #include "Scene.hpp"
 #include "Bar.hpp"
 #include "Player.hpp"
-#include "InteractiveObjects.hpp"
 #include "Map.hpp"
 #include "NPC.hpp"
 
@@ -19,7 +18,6 @@ class GameScene : public Scene {
         Bar m_sanityBar;
         Bar m_dangerBar;
         Player m_player;
-        InteractiveObjects m_objects;
         NPC m_npc;
 };
 

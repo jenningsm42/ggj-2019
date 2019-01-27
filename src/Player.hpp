@@ -19,10 +19,17 @@ public:
     void setName(std::string);
     std::string getName();
 
+    sf::Vector2f getPosition() noexcept;
+    sf::FloatRect getBounds() noexcept;
+    float getObjectRadius() noexcept;
+
 private:
+    float m_objectInteractionRadius;
     const int sprintConst;
     void setXDirection(float dir);
     float getXDirection();
+
+    bool m_showRadius;
 
     AnimatedSprite m_playerSprite;
     std::string m_name;

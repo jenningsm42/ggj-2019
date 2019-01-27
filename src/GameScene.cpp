@@ -34,8 +34,7 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
     m_sanityBar.update(deltaTime / 2);
     m_dangerBar.update(deltaTime / 5);
 
-    m_map.update(game, deltaTime);
-    m_objects.update(game, deltaTime);
+    m_map.update(game, m_player, deltaTime);
 
     m_npc.update(game, deltaTime);
 }

@@ -4,6 +4,7 @@
 #include "AnimatedSprite.hpp"
 
 class Game;
+class Player;
 
 enum struct ObjectType {
     Door,
@@ -16,7 +17,7 @@ class InteractiveObject : public sf::Drawable {
         InteractiveObject();
         ~InteractiveObject();
 
-        void update(Game&, float deltaTime) noexcept;
+        void update(Game&, Player& player, float deltaTime) noexcept;
         void setPosition(float x, float y) noexcept;
 
         virtual ObjectType getType() const noexcept = 0;
