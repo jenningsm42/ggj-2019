@@ -188,34 +188,34 @@ void NPC::initReactions() {
 void NPC::initGraph() {
     m_positions.push_back(std::pair<float, float>(215.f, 340.f));
     m_positions.push_back(std::pair<float, float>(215.f, 405.f));
-    m_positions.push_back(std::pair<float, float>(93.f, 326.f));
+    m_positions.push_back(std::pair<float, float>(88.f, 405.f));
 
-    m_positions.push_back(std::pair<float, float>(166.f, 379.f));
-    m_positions.push_back(std::pair<float, float>(281.f, 379.f));
-    m_positions.push_back(std::pair<float, float>(281.f, 278.f));
+    m_positions.push_back(std::pair<float, float>(215.f, 475.f));
+    m_positions.push_back(std::pair<float, float>(330.f, 475.f));
+    m_positions.push_back(std::pair<float, float>(340.f, 340.f));
 
-    m_positions.push_back(std::pair<float, float>(281.f, 197.f));
-    m_positions.push_back(std::pair<float, float>(364.f, 197.f));
-    m_positions.push_back(std::pair<float, float>(431.f, 197.f));
+    m_positions.push_back(std::pair<float, float>(350.f, 180.f));
+    m_positions.push_back(std::pair<float, float>(415.f, 180.f));
+    m_positions.push_back(std::pair<float, float>(470.f, 180.f));
 
-    m_positions.push_back(std::pair<float, float>(521.f, 185.f));
-    m_positions.push_back(std::pair<float, float>(431.f, 278.f));
-    m_positions.push_back(std::pair<float, float>(431.f, 379.f));
+    m_positions.push_back(std::pair<float, float>(650.f, 210.f));
+    m_positions.push_back(std::pair<float, float>(540.f, 340.f));
+    m_positions.push_back(std::pair<float, float>(540.f, 475.f));
 
-    m_positions.push_back(std::pair<float, float>(431.f, 576.f));
-    m_positions.push_back(std::pair<float, float>(538.f, 429.f));
-    m_positions.push_back(std::pair<float, float>(654.f, 530.f));
+    m_positions.push_back(std::pair<float, float>(540.f, 700.f));
+    m_positions.push_back(std::pair<float, float>(670.f, 500.f));
+    m_positions.push_back(std::pair<float, float>(790.f, 700.f));
 
-    m_positions.push_back(std::pair<float, float>(654.f, 379.f));
-    m_positions.push_back(std::pair<float, float>(654.f, 260.f));
-    m_positions.push_back(std::pair<float, float>(654.f, 185.f));
+    m_positions.push_back(std::pair<float, float>(790.f, 475.f));
+    m_positions.push_back(std::pair<float, float>(790.f, 340.f));
+    m_positions.push_back(std::pair<float, float>(790.f, 210.f));
 
-    m_positions.push_back(std::pair<float, float>(654.f, 124.f));
-    m_positions.push_back(std::pair<float, float>(728.f, 124.f));
-    m_positions.push_back(std::pair<float, float>(782.f, 124.f));
+    m_positions.push_back(std::pair<float, float>(790.f, 150.f));
+    m_positions.push_back(std::pair<float, float>(920.f, 150.f));
+    m_positions.push_back(std::pair<float, float>(980.f, 150.f));
 
-    m_positions.push_back(std::pair<float, float>(728.f, 185.f));
-    m_positions.push_back(std::pair<float, float>(728.f, 260.f));
+    m_positions.push_back(std::pair<float, float>(920.f, 210.f));
+    m_positions.push_back(std::pair<float, float>(920.f, 340.f));
 
     // Render graph
     sf::RenderTexture renderTexture;
