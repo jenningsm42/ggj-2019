@@ -33,6 +33,19 @@ bool Map::canPass(float x, float y) noexcept {
     return collisionIterator != m_collisionTiles.end();
 }
 
+bool Map::isOutside(float x, float y) noexcept {
+    int length = m_tileset.getTileLength();
+    auto tileCoords = std::make_pair<int, int>(x / length, y / length);
+
+    if (x < 0.f)
+        tileCoords.first--;
+    if (y < 0.f)
+        tileCoords.second--;
+
+    auto tileIt = m_mapTiles.find(tileCoords);
+    return tileIt == m_mapTiles.end();
+}
+
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     sf::Sprite tilesSprite;
     tilesSprite.setTexture(m_tilesTexture);
@@ -54,9 +67,13 @@ void Map::parseMap(Game& game, const std::string& path) {
                 file >> type;
                 m_tiles.push_back(static_cast<TileType>(type));
 
+                auto key = std::make_pair<int, int>(x, y);
                 if (m_tiles.back() == TileType::Wall) {
-                    auto key = std::make_pair<int, int>(x, y);
                     m_collisionTiles.emplace(std::move(key));
+                }
+
+                if (m_tiles.back() != TileType::Nothing) {
+                    m_mapTiles.emplace(std::move(key));
                 }
             }
         }

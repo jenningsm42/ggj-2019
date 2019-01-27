@@ -8,19 +8,19 @@
 
 #include <SFML/Graphics/Drawable.hpp>
 #include "Game.hpp"
-#include "AnimatedSprite.hpp"
+#include "Map.hpp"
 
 class Player : public sf::Drawable{
 public:
     Player();
 
     void initialize(Game&, std::string name);
-    void update(Game&, float deltaTime) noexcept;
+    void update(Game&, Map&, float deltaTime) noexcept;
     void setName(std::string);
     std::string getName();
 
 private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const noexcept;
+    const int sprintConst;
     void setXDirection(float dir);
     float getXDirection();
 
@@ -28,7 +28,8 @@ private:
     std::string m_name;
     float m_currentXDirection;
     int sprintLevel;
-    const int sprintConst = 1000;
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const noexcept;
 };
 
 
