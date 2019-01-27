@@ -60,6 +60,9 @@ private:
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0}
     };
 
+    bool m_showGraph;
+    sf::Texture m_graphTexture;
+
     float m_velocity;
     float m_stopFlag;
     float m_stopTimer;

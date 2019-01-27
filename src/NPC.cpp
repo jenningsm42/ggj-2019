@@ -7,12 +7,12 @@
 #include "NPC.hpp"
 
 NPC::NPC(std::string inputName)
-        : m_name(inputName),
-          m_reactTimer(0.f),
+        : m_dir(4),
           m_velocity(2.f),
           m_stopFlag(0.f),
           m_stopTimer(0.f),
-          m_dir(4),
+          m_reactTimer(0.f),
+          m_name(inputName),
           pastReact(nullptr)
 {
     // Do nothing
@@ -43,7 +43,7 @@ void NPC::initialize(Game& game) noexcept {
 
 void NPC::update(Game& game, float deltaTime) noexcept {
     auto currPos = m_npcSprite.getPosition();
-    auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+    // auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
 
     this->m_reactTimer += deltaTime;
 
@@ -69,6 +69,11 @@ void NPC::update(Game& game, float deltaTime) noexcept {
     // If nextPos is object, turn
     // Else, go straight
     this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Straight, 7);
+
+    auto& input = game.getInputHandler();
+    if (input.getKeyTapped(sf::Keyboard::G)) {
+        m_showGraph = !m_showGraph;
+    }
 }
 
 void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
@@ -78,8 +83,8 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
     auto currPos = m_npcSprite.getPosition();
     auto objPos = obj->getPosition();
 
-    auto modX = abs(currPos.x - objPos.x);
-    auto modY = abs(currPos.y - objPos.y);
+    auto modX = std::fabs(currPos.x - objPos.x);
+    auto modY = std::fabs(currPos.y - objPos.y);
     auto modifier = sqrtf(modX + modY);
     auto speed = modifier * this->m_reactSpeed[ObjectType::Door];
 
@@ -101,14 +106,13 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
     this->m_reactTimer = 0.f;
 }
 
-void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
-    target.draw(m_npcSprite);
+void NPC::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.draw(m_npcSprite, states);
 
-    for (auto &pos : m_positions) {
-         sf::CircleShape currShape(10);
-         currShape.setPosition(pos.first, pos.second);
-         currShape.setFillColor(sf::Color(150, 50, 250));
-         target.draw(currShape);
+    if (m_showGraph) {
+        sf::Sprite graphSprite;
+        graphSprite.setTexture(m_graphTexture);
+        target.draw(graphSprite, states);
     }
 }
 
@@ -212,6 +216,44 @@ void NPC::initGraph() {
 
     m_positions.push_back(std::pair<float, float>(728.f, 185.f));
     m_positions.push_back(std::pair<float, float>(728.f, 260.f));
+
+    // Render graph
+    sf::RenderTexture renderTexture;
+    renderTexture.create(1000, 1000);
+
+    const float circleRadius = 10.f;
+
+    for (int i = 0; i < 23; i++) {
+        for (int j = 0; j < 23; j++) {
+            if (m_adjMatrix[i][j] == 1) {
+                auto v1 = m_positions[i];
+                auto v2 = m_positions[j];
+                float dx = v2.first - v1.first;
+                float dy = v2.second - v1.second;
+
+                float angle = std::atan2(dy, dx);
+                float length = sqrtf(dx * dx + dy * dy);
+
+                sf::RectangleShape lineShape(sf::Vector2f(length, 2.f));
+                lineShape.setOrigin(1.f, 1.f);
+                lineShape.rotate(angle * 180.f / 3.14159f);
+                lineShape.setPosition(v1.first + circleRadius, v1.second + circleRadius);
+                lineShape.setFillColor(sf::Color::Red);
+
+                renderTexture.draw(lineShape);
+            }
+        }
+    }
+
+    for (auto &pos : m_positions) {
+         sf::CircleShape currShape(circleRadius);
+         currShape.setPosition(pos.first, pos.second);
+         currShape.setFillColor(sf::Color::Red);
+         renderTexture.draw(currShape);
+    }
+
+    renderTexture.display();
+    m_graphTexture = renderTexture.getTexture();
 }
 
 std::vector<int> NPC::getPathNodes(int sourceIndex, int endIndex) noexcept {
