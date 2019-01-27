@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "Tileset.hpp"
 #include "InteractiveObjects.hpp"
+#include "StaticObjects.hpp"
 
 enum struct TileType : unsigned int {
     Nothing = 0,
@@ -34,6 +35,7 @@ class Map : public sf::Drawable {
         sf::Texture m_tilesTexture;
 
         InteractiveObjects m_objects;
+        StaticObjects m_staticObjects;
 
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
