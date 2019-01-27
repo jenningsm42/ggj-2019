@@ -1,5 +1,6 @@
 #include "InteractiveObject.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 
 InteractiveObject::InteractiveObject() : m_activated(false) {
 }
@@ -7,15 +8,31 @@ InteractiveObject::InteractiveObject() : m_activated(false) {
 InteractiveObject::~InteractiveObject() {
 }
 
-void InteractiveObject::update(Game& game, float deltaTime) noexcept {
+void InteractiveObject::update(Game& game, Player& player, float deltaTime) noexcept {
     auto& input = game.getInputHandler();
-    auto mousePosition = input.getMousePosition();
-    auto position = game.getRenderWindow().mapPixelToCoords(mousePosition);
-    if (m_sprite.getGlobalBounds().contains(position.x, position.y) && !m_activated) {
-        m_sprite.setColor(sf::Color::Green);
-        if (input.getMouseTapped(sf::Mouse::Left)) {
-            m_activated = true;
-            action();
+    auto mouseWindowPosition = input.getMousePosition();
+    auto mousePosition = game.getRenderWindow().mapPixelToCoords(mouseWindowPosition);
+
+    auto pos = m_sprite.getPosition();
+    auto bounds = m_sprite.getLocalBounds();
+    auto playerPos = player.getPosition();
+    auto playerBounds = player.getBounds();
+    float dx = (pos.x + bounds.width / 2.f) - (playerPos.x + playerBounds.width / 2.f);
+    float dy = (pos.y + bounds.height / 2.f) - (playerPos.y + playerBounds.height / 2.f);
+    float distance2 = dx * dx + dy * dy;
+    float r = player.getObjectRadius();
+
+    bool inRadius = distance2 <= r * r;
+
+    if (m_sprite.getGlobalBounds().contains(mousePosition.x, mousePosition.y) && !m_activated) {
+        if (inRadius) {
+            m_sprite.setColor(sf::Color::Green);
+            if (input.getMouseTapped(sf::Mouse::Left)) {
+                m_activated = true;
+                action();
+            }
+        } else {
+            m_sprite.setColor(sf::Color::Red);
         }
     } else {
         m_sprite.setColor(sf::Color::White);

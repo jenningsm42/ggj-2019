@@ -22,8 +22,8 @@ void Map::loadMap(Game& game, const std::string& path) {
     renderMap();
 }
 
-void Map::update(Game& game, float deltaTime) noexcept {
-    m_objects.update(game, deltaTime);
+void Map::update(Game& game, Player& player, float deltaTime) noexcept {
+    m_objects.update(game, player, deltaTime);
 }
 
 bool Map::canPass(float x, float y) noexcept {
