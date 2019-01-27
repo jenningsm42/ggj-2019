@@ -9,6 +9,13 @@
 #include "AnimatedSprite.hpp"
 #include "InteractiveObject.hpp"
 
+enum struct MovementType {
+    Straight,
+    SlowBack,
+    Random,
+    Scared
+};
+
 class NPC : public sf::Drawable {
 public:
     NPC(std::string inputName);
@@ -19,7 +26,7 @@ public:
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
-    void pathing(float xDir, float yDir, float deltaTime, int react, float velocity);
+    void pathing(float xDir, float yDir, float deltaTime, MovementType react, float velocity);
 
     float m_velocity;
     std::string m_name;
