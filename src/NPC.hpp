@@ -27,6 +27,7 @@ public:
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
     void pathing(float xDir, float yDir, float deltaTime, MovementType react, float velocity);
+    void initReactions();
 
     float m_velocity;
     std::string m_name;
@@ -34,6 +35,7 @@ private:
     AnimatedSprite m_npcSprite;
     std::shared_ptr<InteractiveObject> pastReact;
     std::unordered_map<ObjectType, float> m_reactSpeed;
+
 };
 
 

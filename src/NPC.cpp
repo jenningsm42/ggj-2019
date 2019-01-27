@@ -6,13 +6,13 @@
 
 NPC::NPC(std::string inputName)
         : m_name(inputName),
-          m_reactionTimer(0.f)
-m_velocity(2.f)
+          m_reactTimer(0.f),
+          m_velocity(2.f)
 {
 // Nothing so far
 }
 
-void NPC::initialize(Game& gamem, std::string inputName) noexcept {
+void NPC::initialize(Game& game, std::string inputName) noexcept {
     this->initReactions();
 
     auto& cache = game.getAssetCache();
@@ -21,7 +21,7 @@ void NPC::initialize(Game& gamem, std::string inputName) noexcept {
     m_npcSprite.setTexture(*adventurerTexture);
     m_npcSprite.setGridSize(8, 7);
 
-    auto spriteBounds = m_playerSprite.getLocalBounds();
+    auto spriteBounds = m_npcSprite.getLocalBounds();
     m_npcSprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
     m_npcSprite.setScale(2.f, 2.f);
 
@@ -42,8 +42,8 @@ void NPC::update(Game& game, float deltaTime) noexcept {
         this->react(this->pastReact, deltaTime);
     }
 
-    auto currPos = m_sprite.getPosition();
-    auto nextPos = std::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+    auto currPos = m_npcSprite.getPosition();
+    auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
 
     // Check map
     // If nextPos is object, turn
@@ -54,9 +54,9 @@ void NPC::update(Game& game, float deltaTime) noexcept {
 void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
     this->pastReact = obj;
 
-    auto shockType = obj.getType();
-    auto currPos = m_sprite.getPosition();
-    auto objPos = obj.getPosition();
+    auto shockType = obj->getType();
+    auto currPos = m_npcSprite.getPosition();
+    auto objPos = obj->getPosition();
 
     auto modX = abs(currPos.x - objPos.x);
     auto modY = abs(currPos.y - objPos.y);
@@ -117,7 +117,7 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
             //go straight
         case MovementType::Straight:
             m_npcSprite.move(xDir*deltaTime*velocity,yDir*deltaTime*velocity);
-            m_npcSprite("run");
+            m_npcSprite.play("run");
             m_npcSprite.setScale(xDir,yDir);
         default:
             break;
@@ -125,5 +125,5 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
 }
 
 void NPC::initReactions() {
-    this->m_reactSpeed.insert(ObjectType::Door, 1.3f);
+    this->m_reactSpeed[ObjectType::Door] = 1.3f;
 }
