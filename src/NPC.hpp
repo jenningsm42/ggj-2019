@@ -20,7 +20,7 @@ class NPC : public sf::Drawable {
 public:
     NPC(std::string inputName);
 
-    void initialize (Game&, std::string inputName) noexcept;
+    void initialize (Game&) noexcept;
     void update (Game&, float deltaTime) noexcept;
     void react(std::shared_ptr<InteractiveObject> obj, float deltaTime);
 

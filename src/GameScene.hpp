@@ -5,6 +5,7 @@
 #include "Player.hpp"
 #include "InteractiveObjects.hpp"
 #include "Map.hpp"
+#include "NPC.hpp"
 
 class GameScene : public Scene {
     public:
@@ -19,6 +20,7 @@ class GameScene : public Scene {
         Bar m_dangerBar;
         Player m_player;
         InteractiveObjects m_objects;
+        NPC m_npc;
 };
 
 #endif // GAMESCENE_H

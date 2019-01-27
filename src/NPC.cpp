@@ -12,7 +12,7 @@ NPC::NPC(std::string inputName)
 // Nothing so far
 }
 
-void NPC::initialize(Game& game, std::string inputName) noexcept {
+void NPC::initialize(Game& game) noexcept {
     this->initReactions();
 
     auto& cache = game.getAssetCache();
@@ -32,7 +32,6 @@ void NPC::initialize(Game& game, std::string inputName) noexcept {
 
     m_npcSprite.play("idle");
 
-    this->m_name = inputName;
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
@@ -65,13 +64,13 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 
     if (this->m_reactTimer < 1.f) {
         this->m_reactTimer = 0.f;
-        this.pathing(currPos.x, currPos.y, deltaTime, MovementType::SlowBack, 0.1f);
+        this->pathing(currPos.x, currPos.y, deltaTime, MovementType::SlowBack, 0.1f);
         return;
     }
 
     switch (shockType) {
         case ObjectType::Door:
-            this.pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
+            this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
             break;
         default:
             // Should never get to here
@@ -100,13 +99,13 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
         case MovementType::Random:
             m_npcSprite.move(xDir*randX*deltaTime,yDir*randY*deltaTime);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * rand.Y);
+            m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * randY);
             break;
             //scared reaction
         case MovementType::Scared:
             m_npcSprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * rand.Y);
+            m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * randY);
             break;
             //cautious reaction just move back from object
         case MovementType::SlowBack:
