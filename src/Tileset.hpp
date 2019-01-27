@@ -14,7 +14,7 @@ class Tileset {
         void setScale(float scale) noexcept;
         unsigned int getTileLength() noexcept;
 
-        sf::Sprite getTile(int column, int row) noexcept;
+        sf::Sprite getTile(int column, int row) const noexcept;
 
     private:
         std::shared_ptr<sf::Texture> m_tilesetTexture;

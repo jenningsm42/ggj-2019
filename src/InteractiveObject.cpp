@@ -9,7 +9,8 @@ InteractiveObject::~InteractiveObject() {
 
 void InteractiveObject::update(Game& game, float deltaTime) noexcept {
     auto& input = game.getInputHandler();
-    auto position = input.getMousePosition();
+    auto mousePosition = input.getMousePosition();
+    auto position = game.getRenderWindow().mapPixelToCoords(mousePosition);
     if (m_sprite.getGlobalBounds().contains(position.x, position.y) && !m_activated) {
         m_sprite.setColor(sf::Color::Green);
         if (input.getMouseTapped(sf::Mouse::Left)) {
@@ -24,7 +25,8 @@ void InteractiveObject::update(Game& game, float deltaTime) noexcept {
 }
 
 void InteractiveObject::setPosition(float x, float y) noexcept {
-    m_sprite.setPosition(x, y);
+    auto bounds = m_sprite.getLocalBounds();
+    m_sprite.setPosition(x, y - 2.f * (bounds.height - 32.f));
 }
 
 sf::Vector2f InteractiveObject::getPosition() noexcept {

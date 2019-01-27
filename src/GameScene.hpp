@@ -4,6 +4,7 @@
 #include "Bar.hpp"
 #include "Player.hpp"
 #include "InteractiveObjects.hpp"
+#include "Map.hpp"
 
 class GameScene : public Scene {
     public:
@@ -13,6 +14,7 @@ class GameScene : public Scene {
         void draw(sf::RenderWindow&) noexcept override;
 
     private:
+        Map m_map;
         Bar m_sanityBar;
         Bar m_dangerBar;
         Player m_player;
