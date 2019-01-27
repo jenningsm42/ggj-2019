@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class AssetMissingException : public std::exception {
     public:
@@ -32,11 +33,13 @@ class AssetCache {
          *  - AssetMissingException: The asset cannot be found in the working directory */
         std::shared_ptr<sf::Texture> getTexture(const std::string&);
         std::shared_ptr<sf::Font> getFont(const std::string&);
+        std::shared_ptr<sf::SoundBuffer> getSoundBuffer(const std::string&);
 
     private:
         std::string m_workingDirectory;
         std::unordered_map<std::string, std::shared_ptr<sf::Texture>> m_textures;
         std::unordered_map<std::string, std::shared_ptr<sf::Font>> m_fonts;
+        std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> m_soundBuffers;
 };
 
 #endif // ASSETCACHE_H
