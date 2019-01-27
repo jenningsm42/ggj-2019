@@ -48,7 +48,7 @@ void Game::run() {
         update(elapsed.asSeconds());
 
         // Draw everything
-        m_window.clear();
+        m_window.clear(sf::Color::Black);
 
         // Everything in the scene
         m_sceneHandler.draw(m_window);
