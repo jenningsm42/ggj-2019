@@ -9,7 +9,8 @@ InteractiveObject::~InteractiveObject() {
 
 void InteractiveObject::update(Game& game, float deltaTime) noexcept {
     auto& input = game.getInputHandler();
-    auto position = input.getMousePosition();
+    auto mousePosition = input.getMousePosition();
+    auto position = game.getRenderWindow().mapPixelToCoords(mousePosition);
     if (m_sprite.getGlobalBounds().contains(position.x, position.y) && !m_activated) {
         m_sprite.setColor(sf::Color::Green);
         if (input.getMouseTapped(sf::Mouse::Left)) {
