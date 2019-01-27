@@ -2,6 +2,7 @@
 // Created by Christian Wilkerson on 2019-01-26.
 //
 
+#include <cmath>
 #include "NPC.hpp"
 
 NPC::NPC(std::string inputName)
