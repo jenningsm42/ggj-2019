@@ -48,3 +48,21 @@ std::shared_ptr<sf::Font> AssetCache::getFont(const std::string& path) {
 
     return m_fonts[path];
 }
+
+std::shared_ptr<sf::SoundBuffer> AssetCache::getSoundBuffer(const std::string& path) {
+    // Return asset if already loaded
+    auto itSoundBuffer = m_soundBuffers.find(path);
+    if (itSoundBuffer != m_soundBuffers.end()) {
+        return itSoundBuffer->second;
+    }
+
+    // Construct full path with working directory
+    auto assetPath = m_workingDirectory + path;
+    m_soundBuffers[path] = std::make_shared<sf::SoundBuffer>();
+    if (!m_soundBuffers[path]->loadFromFile(assetPath)) {
+        m_soundBuffers.erase(path);
+        throw AssetMissingException(assetPath);
+    }
+
+    return m_soundBuffers[path];
+}
