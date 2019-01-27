@@ -48,10 +48,17 @@ void Map::parseMap(Game& game, const std::string& path) {
         file >> m_columns;
         file >> m_rows;
 
-        for (unsigned int i = 0; i < m_columns * m_rows; i++) {
-            unsigned int type;
-            file >> type;
-            m_tiles.push_back(static_cast<TileType>(type));
+        for (unsigned int y = 0; y < m_rows; y++) {
+            for (unsigned int x = 0; x < m_columns; x++) {
+                unsigned int type;
+                file >> type;
+                m_tiles.push_back(static_cast<TileType>(type));
+
+                if (m_tiles.back() == TileType::Wall) {
+                    auto key = std::make_pair<int, int>(x, y);
+                    m_collisionTiles.emplace(std::move(key));
+                }
+            }
         }
 
         int objectCount = 0;
@@ -64,6 +71,9 @@ void Map::parseMap(Game& game, const std::string& path) {
             file >> objectName;
             file >> tileX;
             file >> tileY;
+
+            auto key = std::make_pair<int, int>(int(tileX), int(tileY));
+            m_collisionTiles.emplace(std::move(key));
 
             float x = tileX * m_tileset.getTileLength();
             float y = tileY * m_tileset.getTileLength();
@@ -95,6 +105,9 @@ void Map::parseMap(Game& game, const std::string& path) {
             file >> staticObjectName;
             file >> tileX;
             file >> tileY;
+
+            auto key = std::make_pair<int, int>(int(tileX), int(tileY));
+            m_collisionTiles.emplace(std::move(key));
 
             float x = tileX * m_tileset.getTileLength();
             float y = tileY * m_tileset.getTileLength();
