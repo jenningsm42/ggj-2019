@@ -63,6 +63,8 @@ void AnimatedSprite::play(const std::string& name) noexcept {
     m_currentColumn = std::get<0>(m_currentAnimation);
     m_currentRow = std::get<1>(m_currentAnimation);
 
+    m_currentFrameTime = 0.f;
+
     updateSpriteRectangle();
 }
 

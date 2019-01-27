@@ -5,8 +5,7 @@
 #include "Player.hpp"
 #include <cmath>
 
-Player::Player()
- : m_currentXDirection(2.f), sprintLevel(sprintConst){
+Player::Player() : sprintConst(1000), m_currentXDirection(2.f), sprintLevel(sprintConst) {
 }
 
 void Player::initialize(Game& game, std::string name) {
@@ -19,15 +18,17 @@ void Player::initialize(Game& game, std::string name) {
     m_playerSprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
     m_playerSprite.setScale(2.f, 2.f);
 
-    m_playerSprite.setPosition(200, 200);
+    m_playerSprite.setPosition(500, 200);
 
     m_playerSprite.addAnimation("idle", 0, 0, 4, 0.5f);
     m_playerSprite.addAnimation("run", 0, 1, 8, 0.15f);
 
     m_playerSprite.play("idle");
+
+    this->setName(name);
 }
 
-void Player::update(Game& game, float deltaTime) noexcept{
+void Player::update(Game& game, Map& map, float deltaTime) noexcept{
     m_playerSprite.update(deltaTime);
 
     auto& input = game.getInputHandler();
@@ -39,26 +40,26 @@ void Player::update(Game& game, float deltaTime) noexcept{
     const bool sprint = input.getKeyDown(sf::Keyboard::LShift);
 
 
-    const float speed = 180.f;
+    const float speed = 280.f;
     float velX = 0.f;
     float velY = 0.f;
-
 
     if (movingLeft && !movingRight){
         velX = -speed;
         if(sprint&&sprintLevel>10){
-            m_playerSprite.move(-speed*deltaTime*3, 0.f);
+            velX *= 2.f;
             m_playerSprite.play("run");
             if(sprintLevel>0){
                 sprintLevel-=2;
             }
         }
         else if(sprintLevel<10 || !sprint){
-            m_playerSprite.move(-speed*deltaTime, 0.f);
             m_playerSprite.play("run");
             if(sprintLevel<sprintConst){
                 sprintLevel++;
             }
+        } else {
+            velX *= .5f;
         }
         m_playerSprite.setScale(2.f,2.f);
         setXDirection(2.f);
@@ -66,19 +67,21 @@ void Player::update(Game& game, float deltaTime) noexcept{
     else if(movingRight && !movingLeft){
         velX = speed;
         if(sprint&&sprintLevel>10){
-            m_playerSprite.move(speed*deltaTime*3, 0.f);
+            velX *= 2.f;
             m_playerSprite.play("run");
             if(sprintLevel>0){
                 sprintLevel-=2;
             }
         }
         else if(sprintLevel<10 || !sprint){
-            m_playerSprite.move(speed*deltaTime, 0.f);
             m_playerSprite.play("run");
             if(sprintLevel<sprintConst){
                 sprintLevel++;
             }
+        } else {
+            velX *= .5f;
         }
+
         m_playerSprite.setScale(-2.f,2.f);
         setXDirection(-2.f);
     }
@@ -88,38 +91,43 @@ void Player::update(Game& game, float deltaTime) noexcept{
 
     if(movingUp && !movingDown){
         velY = -speed;
-        if(sprint && sprintLevel>10){m_playerSprite.move(0.f, -speed*deltaTime*3);
+        if(sprint && sprintLevel>10){
+            velY *= 2.f;
             m_playerSprite.play("run");
             if(sprintLevel>0){
                 sprintLevel-=2;
             }
             }
         else if(sprintLevel<10 || !sprint){
-            m_playerSprite.move(0.f, -speed*deltaTime);
             m_playerSprite.play("run");
             if(sprintLevel<sprintConst){
                 sprintLevel++;
             }
+        } else {
+            velY *= .5f;
         }
+
         m_playerSprite.setScale(getXDirection(),2.f);
     }
     else if(movingDown && !movingUp){
         velY = speed;
-        if(sprint && sprintLevel>10){m_playerSprite.move(0.f, speed*deltaTime*3);
+        if(sprint && sprintLevel>10){
+            velY *= 3.f;
             m_playerSprite.play("run");
             if(sprintLevel>0){
                 sprintLevel-=2;
             }
             }
         else if(sprintLevel<10 || !sprint){
-            m_playerSprite.move(0.f, speed*deltaTime);
             m_playerSprite.play("run");
             if(sprintLevel<sprintConst){
                 sprintLevel++;
             }
+        } else {
+            velY *= .5f;
         }
-        m_playerSprite.setScale(getXDirection(),2.f);
 
+        m_playerSprite.setScale(getXDirection(),2.f);
     }
     else if(!movingDown && !movingUp){
         m_playerSprite.play("run");
@@ -134,7 +142,58 @@ void Player::update(Game& game, float deltaTime) noexcept{
         velY=velY/sqrtf(2);
     }
 
-    m_playerSprite.move(velX*deltaTime,velY*deltaTime);
+    m_playerSprite.move(velX * deltaTime, 0.f);
+    auto bounds = m_playerSprite.getGlobalBounds();
+
+    const float horizontalOffset = 25.f;
+    const float verticalOffset = 10.f;
+    const float topVerticalOffset = 40.f;
+
+    float t = bounds.top + verticalOffset + topVerticalOffset;
+    float l = bounds.left + horizontalOffset;
+    float r = bounds.left + bounds.width - horizontalOffset;
+    float b = bounds.top + bounds.height - verticalOffset;
+
+    if (map.isOutside(l, t) ||
+        map.isOutside(l, b) ||
+        map.isOutside(r, t) ||
+        map.isOutside(r, b)
+    ) {
+        m_playerSprite.move(-velX * deltaTime, 0.f);
+    }
+
+    if (!map.canPass(l, t) ||
+        !map.canPass(l, b) ||
+        !map.canPass(r, t) ||
+        !map.canPass(r, b)
+    ) {
+        m_playerSprite.move(-velX * deltaTime * .5f, 0.f);
+    }
+
+    m_playerSprite.move(0.f, velY * deltaTime);
+    bounds = m_playerSprite.getGlobalBounds();
+
+    t = bounds.top + verticalOffset + topVerticalOffset;
+    l = bounds.left + horizontalOffset;
+    r = bounds.left + bounds.width - horizontalOffset;
+    b = bounds.top + bounds.height - verticalOffset;
+
+    if (map.isOutside(l, t) ||
+        map.isOutside(l, b) ||
+        map.isOutside(r, t) ||
+        map.isOutside(r, b)
+    ) {
+        m_playerSprite.move(0.f, -velY * deltaTime);
+    }
+
+    if (!map.canPass(l, t) ||
+        !map.canPass(l, b) ||
+        !map.canPass(r, t) ||
+        !map.canPass(r, b)
+    ) {
+        m_playerSprite.move(0.f, -velY * deltaTime * .5f);
+    }
+
     m_playerSprite.update(deltaTime);
 
     auto view = game.getRenderWindow().getView();
@@ -163,4 +222,3 @@ std::string Player::getName() {
 void Player::setName(std::string name) {
     this->m_name=name;
 }
-
