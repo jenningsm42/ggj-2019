@@ -18,20 +18,21 @@ enum struct TileType : unsigned int {
 class Map : public sf::Drawable {
     public:
         void initialize(Game& game);
-
         void loadMap(Game& game, const std::string& path);
 
         void update(Game&, float deltaTime) noexcept;
 
         bool canPass(float x, float y) noexcept;
+        bool isOutside(float x, float y) noexcept;
 
     private:
         Tileset m_tileset;
+        unsigned int m_columns;
+        unsigned int m_rows;
         std::vector<TileType> m_tiles;
         std::unordered_map<TileType, std::pair<int, int>> m_tileMappings;
         std::set<std::pair<int, int>> m_collisionTiles;
-        unsigned int m_columns;
-        unsigned int m_rows;
+        std::set<std::pair<int, int>> m_mapTiles;
         sf::Texture m_tilesTexture;
 
         InteractiveObjects m_objects;

@@ -21,7 +21,7 @@ void GameScene::initialize(Game& game) {
 
     m_map.initialize(game);
     m_map.loadMap(game, "data/map.txt");
-  
+
     m_npc.initialize(game);
 }
 
@@ -29,7 +29,7 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
     m_sanityBar.update(deltaTime / 2);
     m_dangerBar.update(deltaTime / 5);
 
-    m_player.update(game, deltaTime);
+    m_player.update(game, m_map, deltaTime);
 
     m_sanityBar.update(deltaTime / 2);
     m_dangerBar.update(deltaTime / 5);
