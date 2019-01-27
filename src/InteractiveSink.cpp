@@ -22,3 +22,7 @@ ObjectType InteractiveSink::getType() const noexcept {
 void InteractiveSink::action() {
     m_sprite.play("on");
 }
+
+void InteractiveSink::reset() {
+    m_sprite.play("off");
+}

@@ -24,10 +24,12 @@ class InteractiveObject : public sf::Drawable {
         sf::Vector2f getPosition() noexcept;
 
         virtual void action() = 0;
+        virtual void reset() = 0;
 
     protected:
         AnimatedSprite m_sprite;
         bool m_activated;
+        sf::Clock clock;
 
     private:
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
