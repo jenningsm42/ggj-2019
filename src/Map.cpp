@@ -38,6 +38,7 @@ void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     tilesSprite.setTexture(m_tilesTexture);
     target.draw(tilesSprite, states);
 
+    target.draw(m_staticObjects, states);
     target.draw(m_objects, states);
 }
 
@@ -82,6 +83,23 @@ void Map::parseMap(Game& game, const std::string& path) {
                 sink->setPosition(x, y);
                 m_objects.addObject(sink);
             }
+        }
+
+        int staticObjectCount = 0;
+        file >> staticObjectCount;
+
+        for (int i = 0; i < staticObjectCount; i++) {
+            std::string staticObjectName = "";
+            int tileX = 0, tileY = 0;
+
+            file >> staticObjectName;
+            file >> tileX;
+            file >> tileY;
+
+            float x = tileX * m_tileset.getTileLength();
+            float y = tileY * m_tileset.getTileLength();
+
+            m_staticObjects.add(game, staticObjectName, x, y);
         }
 
         file.close();

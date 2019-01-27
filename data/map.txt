@@ -16,3 +16,5 @@
 door 4 6
 sink 10 1
 stove 11 1
+1
+obj 1 1
