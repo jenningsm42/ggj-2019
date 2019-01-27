@@ -14,7 +14,7 @@ NPC::NPC(std::string inputName)
           m_dir(4),
           pastReact(nullptr)
 {
-// Nothing so far
+    // Do nothing
 }
 
 void NPC::initialize(Game& game) noexcept {
@@ -37,6 +37,7 @@ void NPC::initialize(Game& game) noexcept {
 
     m_npcSprite.play("idle");
 
+    this->initGraph();
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
@@ -101,6 +102,13 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 
 void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
     target.draw(m_npcSprite);
+
+    for (auto &pos : m_positions) {
+         sf::CircleShape currShape(10);
+         currShape.setPosition(pos.first, pos.second);
+         currShape.setFillColor(sf::Color(150, 50, 250));
+         target.draw(currShape);
+    }
 }
 
 void NPC::pathing(float xPos, float yPos, float deltaTime, MovementType react, float velocity) {
@@ -170,4 +178,37 @@ void NPC::pathing(float xPos, float yPos, float deltaTime, MovementType react, f
 
 void NPC::initReactions() {
     this->m_reactSpeed[ObjectType::Door] = 1.3f;
+}
+
+void NPC::initGraph() {
+    m_positions.push_back(std::pair<float, float>(215.f, 340.f));
+    m_positions.push_back(std::pair<float, float>(215.f, 405.f));
+    m_positions.push_back(std::pair<float, float>(93.f, 326.f));
+
+    m_positions.push_back(std::pair<float, float>(166.f, 379.f));
+    m_positions.push_back(std::pair<float, float>(281.f, 379.f));
+    m_positions.push_back(std::pair<float, float>(281.f, 278.f));
+
+    m_positions.push_back(std::pair<float, float>(281.f, 197.f));
+    m_positions.push_back(std::pair<float, float>(364.f, 197.f));
+    m_positions.push_back(std::pair<float, float>(431.f, 197.f));
+
+    m_positions.push_back(std::pair<float, float>(521.f, 185.f));
+    m_positions.push_back(std::pair<float, float>(431.f, 278.f));
+    m_positions.push_back(std::pair<float, float>(431.f, 379.f));
+
+    m_positions.push_back(std::pair<float, float>(431.f, 576.f));
+    m_positions.push_back(std::pair<float, float>(538.f, 429.f));
+    m_positions.push_back(std::pair<float, float>(654.f, 530.f));
+
+    m_positions.push_back(std::pair<float, float>(654.f, 379.f));
+    m_positions.push_back(std::pair<float, float>(654.f, 260.f));
+    m_positions.push_back(std::pair<float, float>(654.f, 185.f));
+
+    m_positions.push_back(std::pair<float, float>(654.f, 124.f));
+    m_positions.push_back(std::pair<float, float>(728.f, 124.f));
+    m_positions.push_back(std::pair<float, float>(782.f, 124.f));
+
+    m_positions.push_back(std::pair<float, float>(728.f, 185.f));
+    m_positions.push_back(std::pair<float, float>(728.f, 260.f));
 }
