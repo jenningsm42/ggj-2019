@@ -8,6 +8,9 @@ NPC::NPC(std::string inputName)
         : m_name(inputName),
           m_reactTimer(0.f),
           m_velocity(2.f),
+          m_stopFlag(0.f),
+          m_stopTimer(0.f),
+          m_dir(4),
           pastReact(nullptr)
 {
 // Nothing so far
@@ -36,14 +39,28 @@ void NPC::initialize(Game& game) noexcept {
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
+    auto currPos = m_npcSprite.getPosition();
+    auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+
     this->m_reactTimer += deltaTime;
 
     if (this->m_reactTimer >= 1.f and this->pastReact != nullptr) {
         this->react(this->pastReact, deltaTime);
     }
 
-    auto currPos = m_npcSprite.getPosition();
-    auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+    this->m_stopFlag += deltaTime;
+
+    if (this->m_stopFlag >= 5.f) {
+        this->m_stopTimer += deltaTime;
+
+        if (this->m_stopTimer >= 1.f) {
+            this->m_stopFlag = 0.f;
+            this->m_stopTimer = 0.f;
+        }
+
+        this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Stop, 0);
+        return;
+    }
 
     // Check map
     // If nextPos is object, turn
@@ -77,21 +94,23 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
             // Should never get to here
             break;
     }
+
+    this->m_reactTimer = 0.f;
 }
 
 void NPC::draw(sf::RenderTarget& target, sf::RenderStates state) const {
     target.draw(m_npcSprite);
 }
 
-void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, float velocity) {
+void NPC::pathing(float xPos, float yPos, float deltaTime, MovementType react, float velocity) {
     int randX = rand()% -1 +1;
     int randY = rand()% -1 +1;
 
-    if (xDir*randX == xDir) {
+    if (xPos*randX == xPos) {
         randX = rand()% -1 +1;
     }
 
-    if (yDir*randY == yDir) {
+    if (yPos*randY == yPos) {
         randY = rand()% -1 +1;
     }
 
@@ -116,12 +135,36 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
             break;
             //go straight
         case MovementType::Straight:
-            m_npcSprite.move(this->m_velocity*deltaTime*velocity,this->m_velocity*deltaTime*velocity);
+            switch (this->m_dir) {
+                // 1 is up, 2 is right, 3 is down, 4 is left
+                case 1:
+                    m_npcSprite.move(0 , -this->m_velocity*deltaTime*velocity);
+                    break;
+                case 2:
+                    m_npcSprite.move(this->m_velocity*deltaTime*velocity, 0);
+                    break;
+                case 3:
+                    m_npcSprite.move(0 , this->m_velocity*deltaTime*velocity);
+                    break;
+                case 4:
+                    m_npcSprite.move(-this->m_velocity*deltaTime*velocity, 0);
+                    break;
+                default:
+                    break;
+            }
             m_npcSprite.play("run");
             m_npcSprite.setScale(this->m_velocity,this->m_velocity);
+            break;
+        case MovementType::Stop:
+            m_npcSprite.move(0,0);
+            m_npcSprite.play("idle");
+            m_npcSprite.setScale(this->m_velocity, this->m_velocity);
+            break;
         default:
             break;
     }
+
+    m_npcSprite.update(deltaTime);
 }
 
 void NPC::initReactions() {

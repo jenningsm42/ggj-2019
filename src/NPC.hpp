@@ -13,7 +13,8 @@ enum struct MovementType {
     Straight,
     SlowBack,
     Random,
-    Scared
+    Scared,
+    Stop
 };
 
 class NPC : public sf::Drawable {
@@ -29,13 +30,17 @@ private:
     void pathing(float xDir, float yDir, float deltaTime, MovementType react, float velocity);
     void initReactions();
 
+    int m_dir;
+
     float m_velocity;
-    std::string m_name;
+    float m_stopFlag;
+    float m_stopTimer;
     float m_reactTimer;
+
+    std::string m_name;
     AnimatedSprite m_npcSprite;
     std::shared_ptr<InteractiveObject> pastReact;
     std::unordered_map<ObjectType, float> m_reactSpeed;
-
 };
 
 
