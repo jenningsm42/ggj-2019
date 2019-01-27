@@ -8,6 +8,7 @@ class InteractiveSink : public InteractiveObject {
 
         virtual ObjectType getType() const noexcept override;
         virtual void action() override;
+        virtual void reset() override;
 };
 
 #endif // INTERACTIVESINK_H

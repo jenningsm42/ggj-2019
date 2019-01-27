@@ -22,3 +22,7 @@ ObjectType InteractiveStove::getType() const noexcept {
 void InteractiveStove::action() {
     m_sprite.play("on");
 }
+
+void InteractiveStove::reset() {{
+    m_sprite.play("off");
+}}

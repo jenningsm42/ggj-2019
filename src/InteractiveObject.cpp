@@ -1,6 +1,7 @@
 #include "InteractiveObject.hpp"
 #include "Game.hpp"
 #include "Player.hpp"
+#include <SFML/Graphics.hpp>
 
 InteractiveObject::InteractiveObject() : m_activated(false) {
 }
@@ -9,6 +10,7 @@ InteractiveObject::~InteractiveObject() {
 }
 
 void InteractiveObject::update(Game& game, Player& player, float deltaTime) noexcept {
+
     auto& input = game.getInputHandler();
     auto mouseWindowPosition = input.getMousePosition();
     auto mousePosition = game.getRenderWindow().mapPixelToCoords(mouseWindowPosition);
@@ -21,8 +23,8 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime) noex
     float dy = (pos.y + bounds.height / 2.f) - (playerPos.y + playerBounds.height / 2.f);
     float distance2 = dx * dx + dy * dy;
     float r = player.getObjectRadius();
-
     bool inRadius = distance2 <= r * r;
+    const float resetTime = 5; //in seconds
 
     if (m_sprite.getGlobalBounds().contains(mousePosition.x, mousePosition.y) && !m_activated) {
         if (inRadius) {
@@ -30,12 +32,21 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime) noex
             if (input.getMouseTapped(sf::Mouse::Left)) {
                 m_activated = true;
                 action();
+                auto t = clock.restart();
+
             }
         } else {
             m_sprite.setColor(sf::Color::Red);
         }
     } else {
         m_sprite.setColor(sf::Color::White);
+    }
+
+
+    float checkTime = clock.getElapsedTime().asSeconds();
+    if (checkTime>resetTime){
+        m_activated=false;
+        reset();
     }
 
     m_sprite.update(deltaTime);

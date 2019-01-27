@@ -22,3 +22,7 @@ void InteractiveDoor::action() {
     m_sprite.play("opening");
     m_sprite.playAfter("open");
 }
+
+void InteractiveDoor::reset() {{
+    m_sprite.play("closed");
+}}
