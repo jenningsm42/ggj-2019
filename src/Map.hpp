@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Tileset.hpp"
+#include "InteractiveObjects.hpp"
 
 enum struct TileType : unsigned int {
     Nothing = 0,
@@ -16,7 +17,9 @@ class Map : public sf::Drawable {
     public:
         void initialize(Game& game);
 
-        void loadMap(const std::string& path);
+        void loadMap(Game& game, const std::string& path);
+
+        void update(Game&, float deltaTime) noexcept;
 
     private:
         Tileset m_tileset;
@@ -26,9 +29,11 @@ class Map : public sf::Drawable {
         unsigned int m_rows;
         sf::Texture m_tilesTexture;
 
+        InteractiveObjects m_objects;
+
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-        void parseMap(const std::string& path);
+        void parseMap(Game& game, const std::string& path);
         void renderMap();
 };
 

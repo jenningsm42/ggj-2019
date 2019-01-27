@@ -25,7 +25,8 @@ void InteractiveObject::update(Game& game, float deltaTime) noexcept {
 }
 
 void InteractiveObject::setPosition(float x, float y) noexcept {
-    m_sprite.setPosition(x, y);
+    auto bounds = m_sprite.getLocalBounds();
+    m_sprite.setPosition(x, y - 2.f * (bounds.height - 32.f));
 }
 
 sf::Vector2f InteractiveObject::getPosition() noexcept {
