@@ -136,10 +136,14 @@ void Player::update(Game& game, float deltaTime) noexcept{
 
     m_playerSprite.move(velX*deltaTime,velY*deltaTime);
     m_playerSprite.update(deltaTime);
+
+    auto view = game.getRenderWindow().getView();
+    view.setCenter(m_playerSprite.getPosition());
+    game.getRenderWindow().setView(view);
 }
 
-void Player::draw(sf::RenderTarget& target, sf::RenderStates state) const noexcept {
-    target.draw(m_playerSprite);
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const noexcept {
+    target.draw(m_playerSprite, states);
 }
 
 

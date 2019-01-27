@@ -24,6 +24,9 @@ void GameScene::initialize(Game& game) {
 
     m_sanityBar.addToGui(game);
     m_dangerBar.addToGui(game);
+
+    m_map.initialize(game);
+    m_map.loadMap("data/map.txt");
 }
 
 void GameScene::update(Game& game, float deltaTime) noexcept {
@@ -39,6 +42,7 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
 }
 
 void GameScene::draw(sf::RenderWindow& window) noexcept {
+    window.draw(m_map);
     window.draw(m_objects);
     window.draw(m_player);
 }

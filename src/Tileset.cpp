@@ -21,7 +21,7 @@ unsigned int Tileset::getTileLength() noexcept {
     return m_tileBounds.width * m_scale;
 }
 
-sf::Sprite Tileset::getTile(int column, int row) noexcept {
+sf::Sprite Tileset::getTile(int column, int row) const noexcept {
     if (m_tilesetTexture->getSize().x == 0) {
         // Tileset texture not loaded yet
         return sf::Sprite();
