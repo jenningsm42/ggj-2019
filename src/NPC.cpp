@@ -220,6 +220,7 @@ void NPC::initGraph() {
     // Render graph
     sf::RenderTexture renderTexture;
     renderTexture.create(1000, 1000);
+    renderTexture.clear(sf::Color::Transparent);
 
     const float circleRadius = 10.f;
 
