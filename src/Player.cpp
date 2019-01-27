@@ -145,18 +145,27 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
     m_playerSprite.move(velX * deltaTime, 0.f);
     auto bounds = m_playerSprite.getGlobalBounds();
 
-    if (map.isOutside(bounds.left, bounds.top) ||
-        map.isOutside(bounds.left, bounds.top + bounds.height) ||
-        map.isOutside(bounds.left + bounds.width, bounds.top) ||
-        map.isOutside(bounds.left + bounds.width, bounds.top + bounds.height)
+    const float horizontalOffset = 25.f;
+    const float verticalOffset = 10.f;
+    const float topVerticalOffset = 40.f;
+
+    float t = bounds.top + verticalOffset + topVerticalOffset;
+    float l = bounds.left + horizontalOffset;
+    float r = bounds.left + bounds.width - horizontalOffset;
+    float b = bounds.top + bounds.height - verticalOffset;
+
+    if (map.isOutside(l, t) ||
+        map.isOutside(l, b) ||
+        map.isOutside(r, t) ||
+        map.isOutside(r, b)
     ) {
         m_playerSprite.move(-velX * deltaTime, 0.f);
     }
 
-    if (!map.canPass(bounds.left, bounds.top) ||
-        !map.canPass(bounds.left, bounds.top + bounds.height) ||
-        !map.canPass(bounds.left + bounds.width, bounds.top) ||
-        !map.canPass(bounds.left + bounds.width, bounds.top + bounds.height)
+    if (!map.canPass(l, t) ||
+        !map.canPass(l, b) ||
+        !map.canPass(r, t) ||
+        !map.canPass(r, b)
     ) {
         m_playerSprite.move(-velX * deltaTime * .5f, 0.f);
     }
@@ -164,18 +173,23 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
     m_playerSprite.move(0.f, velY * deltaTime);
     bounds = m_playerSprite.getGlobalBounds();
 
-    if (map.isOutside(bounds.left, bounds.top) ||
-        map.isOutside(bounds.left, bounds.top + bounds.height) ||
-        map.isOutside(bounds.left + bounds.width, bounds.top) ||
-        map.isOutside(bounds.left + bounds.width, bounds.top + bounds.height)
+    t = bounds.top + verticalOffset + topVerticalOffset;
+    l = bounds.left + horizontalOffset;
+    r = bounds.left + bounds.width - horizontalOffset;
+    b = bounds.top + bounds.height - verticalOffset;
+
+    if (map.isOutside(l, t) ||
+        map.isOutside(l, b) ||
+        map.isOutside(r, t) ||
+        map.isOutside(r, b)
     ) {
         m_playerSprite.move(0.f, -velY * deltaTime);
     }
 
-    if (!map.canPass(bounds.left, bounds.top) ||
-        !map.canPass(bounds.left, bounds.top + bounds.height) ||
-        !map.canPass(bounds.left + bounds.width, bounds.top) ||
-        !map.canPass(bounds.left + bounds.width, bounds.top + bounds.height)
+    if (!map.canPass(l, t) ||
+        !map.canPass(l, b) ||
+        !map.canPass(r, t) ||
+        !map.canPass(r, b)
     ) {
         m_playerSprite.move(0.f, -velY * deltaTime * .5f);
     }
