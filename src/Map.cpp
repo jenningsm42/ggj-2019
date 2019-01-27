@@ -29,8 +29,14 @@ void Map::update(Game& game, float deltaTime) noexcept {
 bool Map::canPass(float x, float y) noexcept {
     int length = m_tileset.getTileLength();
     auto tileCoords = std::make_pair<int, int>(x / length, y / length);
+
+    if (x < 0.f)
+        tileCoords.first--;
+    if (y < 0.f)
+        tileCoords.second--;
+
     auto collisionIterator = m_collisionTiles.find(tileCoords);
-    return collisionIterator != m_collisionTiles.end();
+    return collisionIterator == m_collisionTiles.end();
 }
 
 bool Map::isOutside(float x, float y) noexcept {

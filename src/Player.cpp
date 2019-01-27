@@ -142,7 +142,7 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
         velY=velY/sqrtf(2);
     }
 
-    m_playerSprite.move(velX *deltaTime, 0.f);
+    m_playerSprite.move(velX * deltaTime, 0.f);
     auto bounds = m_playerSprite.getGlobalBounds();
 
     if (map.isOutside(bounds.left, bounds.top) ||
@@ -151,6 +151,14 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
         map.isOutside(bounds.left + bounds.width, bounds.top + bounds.height)
     ) {
         m_playerSprite.move(-velX * deltaTime, 0.f);
+    }
+
+    if (!map.canPass(bounds.left, bounds.top) ||
+        !map.canPass(bounds.left, bounds.top + bounds.height) ||
+        !map.canPass(bounds.left + bounds.width, bounds.top) ||
+        !map.canPass(bounds.left + bounds.width, bounds.top + bounds.height)
+    ) {
+        m_playerSprite.move(-velX * deltaTime * .5f, 0.f);
     }
 
     m_playerSprite.move(0.f, velY * deltaTime);
@@ -162,6 +170,14 @@ void Player::update(Game& game, Map& map, float deltaTime) noexcept{
         map.isOutside(bounds.left + bounds.width, bounds.top + bounds.height)
     ) {
         m_playerSprite.move(0.f, -velY * deltaTime);
+    }
+
+    if (!map.canPass(bounds.left, bounds.top) ||
+        !map.canPass(bounds.left, bounds.top + bounds.height) ||
+        !map.canPass(bounds.left + bounds.width, bounds.top) ||
+        !map.canPass(bounds.left + bounds.width, bounds.top + bounds.height)
+    ) {
+        m_playerSprite.move(0.f, -velY * deltaTime * .5f);
     }
 
     m_playerSprite.update(deltaTime);
