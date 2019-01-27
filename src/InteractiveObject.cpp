@@ -1,7 +1,7 @@
 #include "InteractiveObject.hpp"
 #include "Game.hpp"
 
-InteractiveObject::InteractiveObject() {
+InteractiveObject::InteractiveObject() : m_activated(false) {
 }
 
 InteractiveObject::~InteractiveObject() {
@@ -9,10 +9,12 @@ InteractiveObject::~InteractiveObject() {
 
 void InteractiveObject::update(Game& game, float deltaTime) noexcept {
     auto& input = game.getInputHandler();
-    auto position = input.getMousePosition();
-    if (m_sprite.getGlobalBounds().contains(position.x, position.y)) {
-        m_sprite.setColor(sf::Color::Yellow);
+    auto mousePosition = input.getMousePosition();
+    auto position = game.getRenderWindow().mapPixelToCoords(mousePosition);
+    if (m_sprite.getGlobalBounds().contains(position.x, position.y) && !m_activated) {
+        m_sprite.setColor(sf::Color::Green);
         if (input.getMouseTapped(sf::Mouse::Left)) {
+            m_activated = true;
             action();
         }
     } else {

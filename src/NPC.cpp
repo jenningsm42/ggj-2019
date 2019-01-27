@@ -5,11 +5,11 @@
 #include "NPC.hpp"
 
 NPC::NPC(std::string inputName)
-: m_name(inputName),
-  m_reactionTimer(0.f)
-  m_velocity(2.f)
+        : m_name(inputName),
+          m_reactionTimer(0.f)
+m_velocity(2.f)
 {
-    // Nothing so far
+// Nothing so far
 }
 
 void NPC::initialize(Game& gamem, std::string inputName) noexcept {
@@ -102,19 +102,19 @@ void NPC::pathing(float xDir, float yDir, float deltaTime, MovementType react, f
             m_npcSprite.play("run");
             m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * rand.Y);
             break;
-        //scared reaction
+            //scared reaction
         case MovementType::Scared:
             m_npcSprite.move(xDir*randX*deltaTime*velocity,yDir*randY*deltaTime*velocity);
             m_npcSprite.play("run");
             m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * rand.Y);
             break;
-        //cautious reaction just move back from object
+            //cautious reaction just move back from object
         case MovementType::SlowBack:
             m_npcSprite.move(-xDir*deltaTime*velocity, -yDir*deltaTime*velocity);
             m_npcSprite.play("run");
             m_npcSprite.setScale(xDir,yDir);
             break;
-         //go straight
+            //go straight
         case MovementType::Straight:
             m_npcSprite.move(xDir*deltaTime*velocity,yDir*deltaTime*velocity);
             m_npcSprite("run");

@@ -14,6 +14,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "build")
 find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
 find_package(TGUI 0.8 REQUIRED)
 
-add_executable(game ${source_files})
+add_executable(game ${source_files} src/StandardObject.cpp src/StandardObject.hpp)
 
 target_link_libraries(game tgui sfml-system sfml-window sfml-graphics sfml-audio)

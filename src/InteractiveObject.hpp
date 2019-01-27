@@ -6,7 +6,9 @@
 class Game;
 
 enum struct ObjectType {
-    Door
+    Door,
+    Stove,
+    Sink
 };
 
 class InteractiveObject : public sf::Drawable {
@@ -24,6 +26,7 @@ class InteractiveObject : public sf::Drawable {
 
     protected:
         AnimatedSprite m_sprite;
+        bool m_activated;
 
     private:
         virtual void draw(sf::RenderTarget&, sf::RenderStates) const;

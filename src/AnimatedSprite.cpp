@@ -38,10 +38,10 @@ void AnimatedSprite::addAnimation(
         startRow = m_rows - 1;
 
     int startFrameNumber = startRow * m_columns + startColumn;
-    if (frameCount < 0)
-        frameCount = 0;
+    if (frameCount < 1)
+        frameCount = 1;
     else if (startFrameNumber + frameCount >= m_columns * m_rows)
-        frameCount = m_columns * m_rows - startFrameNumber - 1;
+        frameCount = m_columns * m_rows - startFrameNumber;
 
     m_animations[name] = std::tuple<int, int, int, float>(
         startColumn, startRow, frameCount, frameTime);
@@ -95,7 +95,7 @@ void AnimatedSprite::nextFrame() noexcept {
         m_currentColumn = std::get<0>(m_currentAnimation);
         m_currentRow = std::get<1>(m_currentAnimation);
     } else {
-        if (m_currentColumn >= m_columns - 1) {
+        if (m_currentColumn >= m_columns- 1) {
             m_currentColumn = 0;
             m_currentRow++;
         } else {
