@@ -32,8 +32,7 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime) noex
             if (input.getMouseTapped(sf::Mouse::Left)) {
                 m_activated = true;
                 action();
-                auto t = clock.restart();
-
+                clock.restart();
             }
         } else {
             m_sprite.setColor(sf::Color::Red);
@@ -43,10 +42,12 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime) noex
     }
 
 
-    float checkTime = clock.getElapsedTime().asSeconds();
-    if (checkTime>resetTime){
-        m_activated=false;
-        reset();
+    if (m_activated) {
+        float checkTime = clock.getElapsedTime().asSeconds();
+        if (checkTime>resetTime){
+            m_activated=false;
+            reset();
+        }
     }
 
     m_sprite.update(deltaTime);

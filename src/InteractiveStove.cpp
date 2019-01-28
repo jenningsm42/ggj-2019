@@ -4,6 +4,8 @@
 InteractiveStove::InteractiveStove(Game& game) {
     auto& cache = game.getAssetCache();
     auto texture = cache.getTexture("stove.png");
+    auto sound = cache.getSoundBuffer("stove.wav");
+    m_sound.setBuffer(*sound);
     m_sprite.setTexture(*texture);
 
     m_sprite.setGridSize(4, 1);
@@ -21,8 +23,10 @@ ObjectType InteractiveStove::getType() const noexcept {
 
 void InteractiveStove::action() {
     m_sprite.play("on");
+    m_sound.play();
 }
 
 void InteractiveStove::reset() {{
     m_sprite.play("off");
+    m_sound.stop();
 }}

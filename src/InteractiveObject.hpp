@@ -2,6 +2,7 @@
 #define INTERACTIVEOBJECT_H
 #include <SFML/Graphics.hpp>
 #include "AnimatedSprite.hpp"
+#include <SFML/Audio.hpp>
 
 class Game;
 class Player;
@@ -28,6 +29,7 @@ class InteractiveObject : public sf::Drawable {
 
     protected:
         AnimatedSprite m_sprite;
+        sf::Sound m_sound;
         bool m_activated;
         sf::Clock clock;
 
