@@ -7,7 +7,6 @@
 
 #include "Game.hpp"
 #include "AnimatedSprite.hpp"
-#include "InteractiveObject.hpp"
 
 enum struct MovementType {
     Straight,
@@ -17,13 +16,20 @@ enum struct MovementType {
     Stop
 };
 
+enum struct ObjectType {
+    Door,
+    Stove,
+    Sink,
+    None
+};
+
 class NPC : public sf::Drawable {
 public:
     NPC(std::string inputName);
 
     void initialize (Game&, float tileLength) noexcept;
     void update (Game&, float deltaTime) noexcept;
-    void react(std::shared_ptr<InteractiveObject> obj, float deltaTime);
+    void react(ObjectType objType, sf::Vector2f objPos, float deltaTime);
 
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates state) const;
@@ -69,9 +75,12 @@ private:
     float m_reactTimer;
     float m_tileLength;
 
+    // Past React
+    ObjectType m_pastType;
+    sf::Vector2f m_pastPos;
+
     std::string m_name;
     AnimatedSprite m_npcSprite;
-    std::shared_ptr<InteractiveObject> pastReact;
     std::unordered_map<ObjectType, float> m_reactSpeed;
 
     std::vector<sf::CircleShape> m_vertices;

@@ -6,7 +6,7 @@ void InteractiveObjects::addObject(std::shared_ptr<InteractiveObject> object) {
 
 void InteractiveObjects::update(Game& game, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept {
     for (auto& object : m_objects) {
-        object->update(game, player, deltaTime, npcs));
+        object->update(game, player, deltaTime, npcs);
     }
 }
 

@@ -51,7 +51,7 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime, std:
     // Check if reactFlag was set
     if (m_reactFlag) {
         for (auto &npc : npcs) {
-            npc.react(this, deltaTime);
+            npc.react(this->getType(), this->m_sprite.getPosition(), deltaTime);
         }
 
         m_reactFlag = false;

@@ -45,5 +45,8 @@ void GameScene::update(Game& game, float deltaTime) noexcept {
 void GameScene::draw(sf::RenderWindow& window) noexcept {
     window.draw(m_map);
     window.draw(m_player);
-    window.draw(m_npc);
+
+    for (auto &npc : m_npcs) {
+        window.draw(npc);
+    }
 }

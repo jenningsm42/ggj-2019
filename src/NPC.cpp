@@ -13,12 +13,12 @@ NPC::NPC(std::string inputName)
           m_stopTimer(0.f),
           m_reactTimer(0.f),
           m_name(inputName),
-          pastReact(nullptr)
+          m_pastType(ObjectType::None)
 {
     // Do nothing
 }
 
-void NPC::initialize(Game& game) noexcept {
+void NPC::initialize (Game &game, float tileLength) noexcept {
     this->initReactions();
 
     auto& cache = game.getAssetCache();
@@ -38,6 +38,8 @@ void NPC::initialize(Game& game) noexcept {
 
     m_npcSprite.play("idle");
 
+    this->m_tileLength = tileLength;
+
     this->initGraph();
 }
 
@@ -47,8 +49,8 @@ void NPC::update(Game& game, float deltaTime) noexcept {
 
     this->m_reactTimer += deltaTime;
 
-    if (this->m_reactTimer >= 1.f and this->pastReact != nullptr) {
-        this->react(this->pastReact, deltaTime);
+    if (this->m_reactTimer >= 1.f and this->m_pastType != ObjectType::None) {
+        this->react(this->m_pastType, this->m_pastPos, deltaTime);
     }
 
     this->m_stopFlag += deltaTime;
@@ -76,12 +78,10 @@ void NPC::update(Game& game, float deltaTime) noexcept {
     }
 }
 
-void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
-    this->pastReact = obj;
-
-    auto shockType = obj->getType();
+void NPC::react(ObjectType objType, sf::Vector2f objPos, float deltaTime) {
+    this->m_pastType = objType;
+    this->m_pastPos = objPos;
     auto currPos = m_npcSprite.getPosition();
-    auto objPos = obj->getPosition();
 
     auto modX = std::fabs(currPos.x - objPos.x);
     auto modY = std::fabs(currPos.y - objPos.y);
@@ -101,8 +101,8 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 
     float speed = 0.f;
     float modifier = sqrtf(eDistance);
-    
-    switch (shockType) {
+
+    switch (objType) {
         case ObjectType::Door:
             speed = modifier * this->m_reactSpeed[ObjectType::Door];
             this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
