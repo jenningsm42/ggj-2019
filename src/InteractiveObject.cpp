@@ -32,8 +32,7 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime, std:
             if (input.getMouseTapped(sf::Mouse::Left)) {
                 m_activated = true;
                 action();
-                auto t = clock.restart();
-
+                clock.restart();
             }
         } else {
             m_sprite.setColor(sf::Color::Red);
@@ -42,10 +41,12 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime, std:
         m_sprite.setColor(sf::Color::White);
     }
 
-    float checkTime = clock.getElapsedTime().asSeconds();
-    if (checkTime>resetTime){
-        m_activated=false;
-        reset();
+    if (m_activated) {
+        float checkTime = clock.getElapsedTime().asSeconds();
+        if (checkTime>resetTime){
+            m_activated=false;
+            reset();
+        }
     }
 
     // Check if reactFlag was set

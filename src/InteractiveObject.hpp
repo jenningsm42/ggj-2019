@@ -1,6 +1,7 @@
 #ifndef INTERACTIVEOBJECT_H
 #define INTERACTIVEOBJECT_H
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "AnimatedSprite.hpp"
 #include "NPC.hpp"
 
@@ -23,6 +24,7 @@ class InteractiveObject : public sf::Drawable {
 
     protected:
         AnimatedSprite m_sprite;
+        sf::Sound m_sound;
         bool m_activated;
         sf::Clock clock;
         bool m_reactFlag;

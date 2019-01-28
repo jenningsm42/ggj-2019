@@ -8,7 +8,7 @@
 
 NPC::NPC(std::string inputName)
         : m_dir(4),
-          m_velocity(2.f),
+          m_speed(100.f),
           m_stopFlag(0.f),
           m_stopTimer(0.f),
           m_reactTimer(0.f),
@@ -31,8 +31,6 @@ void NPC::initialize (Game &game, float tileLength) noexcept {
     m_npcSprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
     m_npcSprite.setScale(2.f, 2.f);
 
-    m_npcSprite.setPosition(150, 250);
-
     m_npcSprite.addAnimation("idle", 0, 0, 4, 0.5f);
     m_npcSprite.addAnimation("run", 0, 1, 8, 0.15f);
 
@@ -44,33 +42,58 @@ void NPC::initialize (Game &game, float tileLength) noexcept {
 }
 
 void NPC::update(Game& game, float deltaTime) noexcept {
-    auto currPos = m_npcSprite.getPosition();
-    // auto nextPos = sf::Vector2f(currPos.x * this->m_velocity, currPos.y * this->m_velocity);
+    if (m_waiting) {
+        auto currentNode = m_nodes[m_currentNodeIndex];
+        auto timeElapsed = m_waitTimer.getElapsedTime().asSeconds();
+        if (timeElapsed >= currentNode.second) {
+            // Start walking to the next node
+            auto nextNodeIndex = m_currentNodeIndex + 1;
+            if (nextNodeIndex >= static_cast<int>(m_nodes.size()))
+                nextNodeIndex = 0;
+            auto nextNode = m_nodes[nextNodeIndex];
 
-    this->m_reactTimer += deltaTime;
+            std::queue<int>().swap(m_currentPath);
 
+            auto path = getPathNodes(currentNode.first, nextNode.first);
+            for (int index : path) {
+                m_currentPath.push(index);
+            }
+
+            m_waiting = false;
+        }
+    } else {
+        auto pos = m_npcSprite.getPosition();
+        auto bounds = m_npcSprite.getLocalBounds();
+        pos.y += bounds.height / 2.f;
+      
+        auto nodePos = m_positions[m_currentPath.front()];
+
+        float dx = nodePos.x - pos.x;
+        float dy = nodePos.y - pos.y;
+
+        if (dx * dx + dy * dy < 0.1f) {
+            m_currentPath.pop();
+            if (m_currentPath.empty()) {
+                m_waiting = true;
+                m_waitTimer.restart();
+
+                m_currentNodeIndex++;
+                if (m_currentNodeIndex >= static_cast<int>(m_nodes.size())) {
+                    m_currentNodeIndex = 0;
+                }
+
+                setPositionToNode(m_nodes[m_currentNodeIndex].first);
+            }
+        } else {
+            float length = sqrtf(dx * dx + dy * dy);
+            sf::Vector2f velocity(dx / length, dy / length);
+            m_npcSprite.move(velocity.x * m_speed * deltaTime, velocity.y * m_speed * deltaTime);
+        }
+    }
+  
     if (this->m_reactTimer >= 1.f and this->m_pastType != ObjectType::None) {
         this->react(this->m_pastType, this->m_pastPos, deltaTime);
     }
-
-    this->m_stopFlag += deltaTime;
-
-    if (this->m_stopFlag >= 5.f) {
-        this->m_stopTimer += deltaTime;
-
-        if (this->m_stopTimer >= 1.f) {
-            this->m_stopFlag = 0.f;
-            this->m_stopTimer = 0.f;
-        }
-
-        this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Stop, 0);
-        return;
-    }
-
-    // Check map
-    // If nextPos is object, turn
-    // Else, go straight
-    this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Straight, 7);
 
     auto& input = game.getInputHandler();
     if (input.getKeyTapped(sf::Keyboard::G)) {
@@ -148,48 +171,48 @@ void NPC::pathing(float xPos, float yPos, float deltaTime, MovementType react, f
     switch(react) {
         //normal reaction
         case MovementType::Random:
-            m_npcSprite.move(this->m_velocity*randX*deltaTime,this->m_velocity*randY*deltaTime);
+            m_npcSprite.move(m_speed*randX*deltaTime, m_speed*randY*deltaTime);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity * randX, this->m_velocity * randY);
+            m_npcSprite.setScale(2.f * randX, 2.f * randY);
             break;
             //scared reaction
         case MovementType::Scared:
-            m_npcSprite.move(this->m_velocity*randX*deltaTime*velocity,this->m_velocity*randY*deltaTime*velocity);
+            m_npcSprite.move(m_speed*randX*deltaTime*velocity, m_speed*randY*deltaTime*velocity);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity * randX,this->m_velocity * randY);
+            m_npcSprite.setScale(2.f * randX, 2.f * randY);
             break;
             //cautious reaction just move back from object
         case MovementType::SlowBack:
-            m_npcSprite.move(-this->m_velocity*deltaTime*velocity, -this->m_velocity*deltaTime*velocity);
+            m_npcSprite.move(-m_speed*deltaTime*velocity, -m_speed*deltaTime*velocity);
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity,this->m_velocity);
+            m_npcSprite.setScale(2.f, 2.f);
             break;
             //go straight
         case MovementType::Straight:
             switch (this->m_dir) {
                 // 1 is up, 2 is right, 3 is down, 4 is left
                 case 1:
-                    m_npcSprite.move(0 , -this->m_velocity*deltaTime*velocity);
+                    m_npcSprite.move(0 , -m_speed*deltaTime*velocity);
                     break;
                 case 2:
-                    m_npcSprite.move(this->m_velocity*deltaTime*velocity, 0);
+                    m_npcSprite.move(m_speed*deltaTime*velocity, 0);
                     break;
                 case 3:
-                    m_npcSprite.move(0 , this->m_velocity*deltaTime*velocity);
+                    m_npcSprite.move(0 , m_speed*deltaTime*velocity);
                     break;
                 case 4:
-                    m_npcSprite.move(-this->m_velocity*deltaTime*velocity, 0);
+                    m_npcSprite.move(-m_speed*deltaTime*velocity, 0);
                     break;
                 default:
                     break;
             }
             m_npcSprite.play("run");
-            m_npcSprite.setScale(this->m_velocity,this->m_velocity);
+            m_npcSprite.setScale(2.f,2.f);
             break;
         case MovementType::Stop:
             m_npcSprite.move(0,0);
             m_npcSprite.play("idle");
-            m_npcSprite.setScale(this->m_velocity, this->m_velocity);
+            m_npcSprite.setScale(2.f, 2.f);
             break;
         default:
             break;
@@ -203,36 +226,50 @@ void NPC::initReactions() {
 }
 
 void NPC::initGraph() {
-    m_positions.push_back(std::pair<float, float>(215.f, 340.f));
-    m_positions.push_back(std::pair<float, float>(215.f, 405.f));
-    m_positions.push_back(std::pair<float, float>(88.f, 405.f));
+    m_positions.push_back(sf::Vector2f(215.f, 340.f));
+    m_positions.push_back(sf::Vector2f(215.f, 405.f));
+    m_positions.push_back(sf::Vector2f(88.f, 405.f));
 
-    m_positions.push_back(std::pair<float, float>(215.f, 475.f));
-    m_positions.push_back(std::pair<float, float>(330.f, 475.f));
-    m_positions.push_back(std::pair<float, float>(340.f, 340.f));
+    m_positions.push_back(sf::Vector2f(215.f, 475.f));
+    m_positions.push_back(sf::Vector2f(330.f, 475.f));
+    m_positions.push_back(sf::Vector2f(340.f, 340.f));
 
-    m_positions.push_back(std::pair<float, float>(350.f, 180.f));
-    m_positions.push_back(std::pair<float, float>(415.f, 180.f));
-    m_positions.push_back(std::pair<float, float>(470.f, 180.f));
+    m_positions.push_back(sf::Vector2f(350.f, 180.f));
+    m_positions.push_back(sf::Vector2f(415.f, 180.f));
+    m_positions.push_back(sf::Vector2f(470.f, 180.f));
 
-    m_positions.push_back(std::pair<float, float>(650.f, 210.f));
-    m_positions.push_back(std::pair<float, float>(540.f, 340.f));
-    m_positions.push_back(std::pair<float, float>(540.f, 475.f));
+    m_positions.push_back(sf::Vector2f(650.f, 210.f));
+    m_positions.push_back(sf::Vector2f(540.f, 340.f));
+    m_positions.push_back(sf::Vector2f(540.f, 475.f));
 
-    m_positions.push_back(std::pair<float, float>(540.f, 700.f));
-    m_positions.push_back(std::pair<float, float>(670.f, 500.f));
-    m_positions.push_back(std::pair<float, float>(790.f, 700.f));
+    m_positions.push_back(sf::Vector2f(540.f, 700.f));
+    m_positions.push_back(sf::Vector2f(670.f, 500.f));
+    m_positions.push_back(sf::Vector2f(790.f, 700.f));
 
-    m_positions.push_back(std::pair<float, float>(790.f, 475.f));
-    m_positions.push_back(std::pair<float, float>(790.f, 340.f));
-    m_positions.push_back(std::pair<float, float>(790.f, 210.f));
+    m_positions.push_back(sf::Vector2f(790.f, 475.f));
+    m_positions.push_back(sf::Vector2f(790.f, 340.f));
+    m_positions.push_back(sf::Vector2f(790.f, 210.f));
 
-    m_positions.push_back(std::pair<float, float>(790.f, 150.f));
-    m_positions.push_back(std::pair<float, float>(920.f, 150.f));
-    m_positions.push_back(std::pair<float, float>(980.f, 150.f));
+    m_positions.push_back(sf::Vector2f(790.f, 150.f));
+    m_positions.push_back(sf::Vector2f(920.f, 150.f));
+    m_positions.push_back(sf::Vector2f(980.f, 150.f));
 
-    m_positions.push_back(std::pair<float, float>(920.f, 210.f));
-    m_positions.push_back(std::pair<float, float>(920.f, 340.f));
+    m_positions.push_back(sf::Vector2f(920.f, 210.f));
+    m_positions.push_back(sf::Vector2f(920.f, 340.f));
+
+    // Create default path
+    m_nodes.push_back(std::make_pair<int, float>(20, 10.f));
+    m_nodes.push_back(std::make_pair<int, float>(19, 5.f));
+    m_nodes.push_back(std::make_pair<int, float>(22, 15.f));
+    m_nodes.push_back(std::make_pair<int, float>(12, 15.f));
+    m_nodes.push_back(std::make_pair<int, float>(1, 10.f));
+    m_nodes.push_back(std::make_pair<int, float>(8, 10.f));
+
+    m_currentNodeIndex = 0;
+
+    setPositionToNode(m_nodes[m_currentNodeIndex].first);
+    m_waitTimer.restart();
+    m_waiting = true;
 
     // Render graph
     sf::RenderTexture renderTexture;
@@ -246,8 +283,8 @@ void NPC::initGraph() {
             if (m_adjMatrix[i][j] == 1) {
                 auto v1 = m_positions[i];
                 auto v2 = m_positions[j];
-                float dx = v2.first - v1.first;
-                float dy = v2.second - v1.second;
+                float dx = v2.x - v1.x;
+                float dy = v2.y - v1.y;
 
                 float angle = std::atan2(dy, dx);
                 float length = sqrtf(dx * dx + dy * dy);
@@ -255,7 +292,7 @@ void NPC::initGraph() {
                 sf::RectangleShape lineShape(sf::Vector2f(length, 2.f));
                 lineShape.setOrigin(1.f, 1.f);
                 lineShape.rotate(angle * 180.f / 3.14159f);
-                lineShape.setPosition(v1.first + circleRadius, v1.second + circleRadius);
+                lineShape.setPosition(v1.x + circleRadius, v1.y + circleRadius);
                 lineShape.setFillColor(sf::Color::Red);
 
                 renderTexture.draw(lineShape);
@@ -265,7 +302,7 @@ void NPC::initGraph() {
 
     for (auto &pos : m_positions) {
          sf::CircleShape currShape(circleRadius);
-         currShape.setPosition(pos.first, pos.second);
+         currShape.setPosition(pos.x, pos.y);
          currShape.setFillColor(sf::Color::Red);
          renderTexture.draw(currShape);
     }
@@ -286,19 +323,29 @@ std::vector<int> NPC::getPathNodes(int sourceIndex, int endIndex) noexcept {
         auto current = toVisit.front();
         toVisit.pop();
 
+        visited.insert(current.back());
+
         if (current.back() == endIndex) {
             return current;
         }
 
-        for (auto& other : m_adjMatrix[current.back()]) {
-            auto it = visited.find(other);
-            if (it != visited.end()) {
-                std::vector<int> newPath = current;
-                newPath.push_back(other);
-                toVisit.push(newPath);
+        for (int i = 0; i < 23; i++) {
+            if (m_adjMatrix[current.back()][i] == 1) {
+                auto it = visited.find(i);
+                if (it == visited.end()) {
+                    std::vector<int> newPath = current;
+                    newPath.push_back(i);
+                    toVisit.push(newPath);
+                }
             }
         }
     }
 
     return std::vector<int>();
+}
+
+void NPC::setPositionToNode(int node) {
+    auto pos = m_positions[node];
+    auto bounds = m_npcSprite.getLocalBounds();
+    m_npcSprite.setPosition(pos.x, pos.y - bounds.height / 2.f);
 }

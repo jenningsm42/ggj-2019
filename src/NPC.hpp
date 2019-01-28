@@ -69,7 +69,7 @@ private:
     bool m_showGraph;
     sf::Texture m_graphTexture;
 
-    float m_velocity;
+    float m_speed;
     float m_stopFlag;
     float m_stopTimer;
     float m_reactTimer;
@@ -83,8 +83,19 @@ private:
     AnimatedSprite m_npcSprite;
     std::unordered_map<ObjectType, float> m_reactSpeed;
 
-    std::vector<sf::CircleShape> m_vertices;
-    std::vector<std::pair<float, float>> m_positions;
+    std::vector<sf::Vector2f> m_positions;
+
+    // node number and amount of time to wait at that node
+    std::vector<std::pair<int, float>> m_nodes;
+
+    // indices into m_nodes from above
+    int m_currentNodeIndex;
+
+    std::queue<int> m_currentPath;
+    sf::Clock m_waitTimer;
+    bool m_waiting;
+
+    void setPositionToNode(int node);
 };
 
 

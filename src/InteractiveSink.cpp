@@ -4,6 +4,8 @@
 InteractiveSink::InteractiveSink(Game& game) {
     auto& cache = game.getAssetCache();
     auto texture = cache.getTexture("sink.png");
+    auto sound = cache.getSoundBuffer("faucet.wav");
+    m_sound.setBuffer(*sound);
     m_sprite.setTexture(*texture);
 
     m_sprite.setGridSize(4, 1);
@@ -21,8 +23,10 @@ ObjectType InteractiveSink::getType() const noexcept {
 
 void InteractiveSink::action() {
     m_sprite.play("on");
+    m_sound.play();
 }
 
 void InteractiveSink::reset() {
     m_sprite.play("off");
+    m_sound.stop();
 }
