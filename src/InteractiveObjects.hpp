@@ -7,7 +7,7 @@ class InteractiveObjects : public sf::Drawable {
     public:
         void addObject(std::shared_ptr<InteractiveObject> object);
 
-        void update(Game& game, Player& player, float deltaTime) noexcept;
+        void update(Game& game, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept;
 
     private:
         std::vector<std::shared_ptr<InteractiveObject>> m_objects;

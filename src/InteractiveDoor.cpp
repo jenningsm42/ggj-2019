@@ -21,6 +21,7 @@ ObjectType InteractiveDoor::getType() const noexcept {
 void InteractiveDoor::action() {
     m_sprite.play("opening");
     m_sprite.playAfter("open");
+    m_reactFlag = true;
 }
 
 void InteractiveDoor::reset() {{

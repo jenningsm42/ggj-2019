@@ -4,9 +4,9 @@ void InteractiveObjects::addObject(std::shared_ptr<InteractiveObject> object) {
     m_objects.push_back(object);
 }
 
-void InteractiveObjects::update(Game& game, Player& player, float deltaTime) noexcept {
+void InteractiveObjects::update(Game& game, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept {
     for (auto& object : m_objects) {
-        object->update(game, player, deltaTime);
+        object->update(game, player, deltaTime, npcs));
     }
 }
 

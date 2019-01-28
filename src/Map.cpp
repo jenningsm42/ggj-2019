@@ -22,8 +22,8 @@ void Map::loadMap(Game& game, const std::string& path) {
     renderMap();
 }
 
-void Map::update(Game& game, Player& player, float deltaTime) noexcept {
-    m_objects.update(game, player, deltaTime);
+void Map::update(Game& game, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept {
+    m_objects.update(game, player, deltaTime, npcs);
 }
 
 bool Map::canPass(float x, float y) noexcept {
@@ -50,6 +50,10 @@ bool Map::isOutside(float x, float y) noexcept {
 
     auto tileIt = m_mapTiles.find(tileCoords);
     return tileIt == m_mapTiles.end();
+}
+
+float Map::getTileLength() {
+    return m_tileset.getTileLength();
 }
 
 void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {

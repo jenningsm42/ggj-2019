@@ -18,7 +18,7 @@ class GameScene : public Scene {
         Bar m_sanityBar;
         Bar m_dangerBar;
         Player m_player;
-        NPC m_npc;
+        std::vector<NPC> m_npcs;
 };
 
 #endif // GAMESCENE_H

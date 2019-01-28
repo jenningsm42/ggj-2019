@@ -9,7 +9,7 @@ InteractiveObject::InteractiveObject() : m_activated(false) {
 InteractiveObject::~InteractiveObject() {
 }
 
-void InteractiveObject::update(Game& game, Player& player, float deltaTime) noexcept {
+void InteractiveObject::update(Game& game, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept {
 
     auto& input = game.getInputHandler();
     auto mouseWindowPosition = input.getMousePosition();
@@ -42,11 +42,19 @@ void InteractiveObject::update(Game& game, Player& player, float deltaTime) noex
         m_sprite.setColor(sf::Color::White);
     }
 
-
     float checkTime = clock.getElapsedTime().asSeconds();
     if (checkTime>resetTime){
         m_activated=false;
         reset();
+    }
+
+    // Check if reactFlag was set
+    if (m_reactFlag) {
+        for (auto &npc : npcs) {
+            npc.react(this, deltaTime);
+        }
+
+        m_reactFlag = false;
     }
 
     m_sprite.update(deltaTime);

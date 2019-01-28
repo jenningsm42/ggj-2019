@@ -21,7 +21,7 @@ class NPC : public sf::Drawable {
 public:
     NPC(std::string inputName);
 
-    void initialize (Game&) noexcept;
+    void initialize (Game&, float tileLength) noexcept;
     void update (Game&, float deltaTime) noexcept;
     void react(std::shared_ptr<InteractiveObject> obj, float deltaTime);
 
@@ -67,6 +67,7 @@ private:
     float m_stopFlag;
     float m_stopTimer;
     float m_reactTimer;
+    float m_tileLength;
 
     std::string m_name;
     AnimatedSprite m_npcSprite;

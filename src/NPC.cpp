@@ -85,17 +85,34 @@ void NPC::react(std::shared_ptr<InteractiveObject> obj, float deltaTime) {
 
     auto modX = std::fabs(currPos.x - objPos.x);
     auto modY = std::fabs(currPos.y - objPos.y);
-    auto modifier = sqrtf(modX + modY);
-    auto speed = modifier * this->m_reactSpeed[ObjectType::Door];
+    auto eDistance = sqrtf(pow(modX, 2.0) + pow(modY, 2.0));
 
+    // Doesn't effect NPC if not within effective range
+    if (eDistance > 2.f * this->m_tileLength) {
+        return;
+    }
+
+    // Check if player is spamming react
     if (this->m_reactTimer < 1.f) {
         this->m_reactTimer = 0.f;
         this->pathing(currPos.x, currPos.y, deltaTime, MovementType::SlowBack, 0.1f);
         return;
     }
 
+    float speed = 0.f;
+    float modifier = sqrtf(eDistance);
+    
     switch (shockType) {
         case ObjectType::Door:
+            speed = modifier * this->m_reactSpeed[ObjectType::Door];
+            this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
+            break;
+        case ObjectType::Stove:
+            speed = modifier * this->m_reactSpeed[ObjectType::Stove];
+            this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
+            break;
+        case ObjectType::Sink:
+            speed = modifier * this->m_reactSpeed[ObjectType::Sink];
             this->pathing(currPos.x, currPos.y, deltaTime, MovementType::Scared, speed);
             break;
         default:

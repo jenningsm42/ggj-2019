@@ -20,10 +20,13 @@ class Map : public sf::Drawable {
         void initialize(Game& game);
         void loadMap(Game& game, const std::string& path);
 
-        void update(Game&, Player& player, float deltaTime) noexcept;
+        void update(Game&, Player& player, float deltaTime, std::vector<NPC> &npcs) noexcept;
 
         bool canPass(float x, float y) noexcept;
         bool isOutside(float x, float y) noexcept;
+
+        void registerNPCs(std::vector<NPC> &npcArr);
+        float getTileLength();
 
     private:
         Tileset m_tileset;
